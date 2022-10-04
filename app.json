@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "SportsEventOrganizer",
-    "slug": "SportsEventOrganizer",
+    "name": "FairPlayer",
+    "slug": "FairPlayer",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
