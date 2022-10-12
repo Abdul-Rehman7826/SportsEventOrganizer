@@ -1,8 +1,12 @@
 import React from "react";
-import AccountScreen from './app/screens/ListingsScreen';
+import { NavigationContainer } from "@react-navigation/native"; 
+
+import AuthNavigation from './app/Navigation/AuthNavigation';
 function App() {
   return (
-    <AccountScreen/>
+    <NavigationContainer>
+      <AuthNavigation/>
+    </NavigationContainer>
   );
 }
 

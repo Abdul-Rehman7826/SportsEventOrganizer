@@ -1,13 +1,13 @@
 import React from "react";
 import { StyleSheet, View, ImageBackground, Text } from "react-native";
 
-import { ListItem} from "../components/lists";
-import colors from "../config/colors";
-import Icon from "../components/Icon";
+import { ListItem} from "../../components/lists";
+import colors from "../../config/colors";
+import Icon from "../../components/Icon";
 // import routes from "../navigation/routes";
-import Screen from "../components/Screen";
-import Input from "../components/Input";
-import AppButton from "../components/Button";
+import Screen from "../../components/Screen";
+import Input from "../../components/Input";
+import AppButton from "../../components/Button";
 
 
 function AccountScreen({ navigation }) {

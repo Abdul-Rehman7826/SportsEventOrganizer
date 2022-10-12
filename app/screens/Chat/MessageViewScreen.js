@@ -1,9 +1,9 @@
 import React from 'react'
 import { ImageBackground, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Screen from '../components/Screen'
-import colors from "../config/colors";
-import { ListItem } from '../components/lists';
+import Screen from '../../components/Screen'
+import colors from "../../config/colors";
+import { ListItem } from '../../components/lists';
 
 const MessageViewScreen = () => {
     const data = [

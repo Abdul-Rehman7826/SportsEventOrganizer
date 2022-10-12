@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useLayoutEffect } from 'react';
 import {
   View,
   Text,
@@ -6,20 +6,25 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ImageBackground,
 } from 'react-native';
-import Screen from '../components/Screen';
-import colors from '../config/colors';
+import colors from '../../config/colors';
+import Screen from '../../components/Screen';
 
 function SignUp({ navigation }) {
   const [fName, setFname] = useState();
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    })
+  }, [navigation]);
+
   return (
     <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
-        <Image style={styles.image} source={require('../assets/logo.png')} />
+        <Image style={styles.image} source={require('../../assets/logo.png')} />
         <Text style={styles.imgText}>Sports Event Organizer</Text>
       </View>
       <View style={[styles.lastContainer,styles.shadowOpt]}>
@@ -69,7 +74,7 @@ function SignUp({ navigation }) {
         <Text >
           I'm already a member .
           </Text>
-          <TouchableOpacity onPress={() => console.log('signIn')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text
               style={{
                 color: colors.black,
@@ -79,7 +84,6 @@ function SignUp({ navigation }) {
               Login
             </Text>
           </TouchableOpacity>
-        
         </View>
       
       

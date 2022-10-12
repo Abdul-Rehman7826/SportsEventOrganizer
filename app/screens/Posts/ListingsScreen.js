@@ -1,9 +1,9 @@
 import React from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
-import Card from "../components/Card";
-import colors from "../config/colors";
-import Screen from "../components/Screen";
+import Card from "../../components/Card";
+import colors from "../../config/colors";
+import Screen from "../../components/Screen";
 import { ScrollView } from "react-native-gesture-handler";
 import requestIdleCallback from "react-native-web/dist/cjs/modules/requestIdleCallback";
 

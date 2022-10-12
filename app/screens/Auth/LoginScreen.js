@@ -1,5 +1,5 @@
+import React, { useState, useLayoutEffect } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -7,17 +7,26 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from 'react-native';
-import Input from '../components/Input';
-import Screen from '../components/Screen';
-import colors from '../config/colors';
+
+
+import Input from '../../components/Input';
+import colors from '../../config/colors';
+import Screen from '../../components/Screen';
 
 function SignIn({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    })
+  }, [navigation]);
   return (
     <Screen style={styles.outContainer}>
+      <StatusBar style='light' />
       <View style={styles.imgContainer}>
-        <Image style={styles.image} source={require('../assets/logo.png')} />
+        <Image style={styles.image} source={require('../../assets/logo.png')} />
       </View>
       <View style={[styles.lastContainer]}>
         <Text style={styles.signin}>Sign In</Text>
@@ -39,7 +48,6 @@ function SignIn({ navigation }) {
             password={true}
           />
         </View>
-
         <TouchableOpacity style={styles.Fpassword}>
           {/* <Text>Forgot Password?</Text> */}
         </TouchableOpacity>
@@ -47,7 +55,24 @@ function SignIn({ navigation }) {
         <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}>
           <Text style={styles.singupText}>Sign In</Text>
         </TouchableOpacity>
+
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <Text >
+            Create a account .
+          </Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Registeration')}>
+            <Text
+              style={{
+                color: colors.black,
+                fontWeight: 'bold',
+                marginLeft: 5,
+              }}>
+              Registration
+            </Text>
+          </TouchableOpacity>
+        </View>
       </View>
+
     </Screen>
   );
 }

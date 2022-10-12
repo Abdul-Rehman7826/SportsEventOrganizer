@@ -2,11 +2,11 @@ import React from 'react'
 import { ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 import { Feather } from "@expo/vector-icons";
-import Screen from '../components/Screen'
-import colors from '../config/colors'
-import AppButton from '../components/Button'
-import AppTextInput from '../components/TextInput'
-import { ListItem, ListItemSeparator } from '../components/lists'
+import Screen from '../../components/Screen'
+import colors from '../../config/colors'
+import AppButton from '../../components/Button'
+import AppTextInput from '../../components/TextInput'
+import { ListItem, ListItemSeparator } from '../../components/lists'
 
 const CreateTeamScreen = () => {
   return (

@@ -6,9 +6,9 @@ import {
   FormField,
   FormPicker as Picker,
   SubmitButton,
-} from "../components/forms";
-import CategoryPickerItem from "../components/CategoryPickerItem";
-import Screen from "../components/Screen";
+} from "../../components/forms";
+import CategoryPickerItem from "../../components/CategoryPickerItem";
+import Screen from "../../components/Screen";
 
 
 
