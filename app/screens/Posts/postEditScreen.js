@@ -69,7 +69,7 @@ const categories = [
   },
 ];
 
-function ListingEditScreen() {
+function postEditScreen() {
   return (
     <Screen style={styles.container}>
       <Form
@@ -115,4 +115,4 @@ const styles = StyleSheet.create({
     padding: 10,
   },
 });
-export default ListingEditScreen;
+export default postEditScreen;
