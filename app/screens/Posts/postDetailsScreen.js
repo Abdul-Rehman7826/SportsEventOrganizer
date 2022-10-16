@@ -8,13 +8,13 @@ import Text from "../../components/Text";
 function postDetailsScreen(props) {
   return (
     <View>
-      <Image style={styles.image} source={require("../assets/jacket1.png")} />
+      <Image style={styles.image} source={require("../../assets/jacket1.png")} />
       <View style={styles.detailsContainer}>
         <Text style={styles.title}>Red jacket for sale</Text>
         <Text style={styles.price}>$100</Text>
         <View style={styles.userContainer}>
           <ListItem
-            image={require("../assets/ahmad1.png")}
+            image={require("../../assets/ahmad1.png")}
             title="Ahmad Al-Amin"
             subTitle="5 Listings"
           />

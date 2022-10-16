@@ -9,6 +9,7 @@ import {
 } from "../../components/forms";
 import CategoryPickerItem from "../../components/CategoryPickerItem";
 import Screen from "../../components/Screen";
+import colors from "../../config/colors";
 
 
 
@@ -104,7 +105,7 @@ function postEditScreen() {
           numberOfLines={3}
           placeholder="Description"
         />
-        <SubmitButton title="Post" />
+        <SubmitButton  title="Post" />
       </Form>
     </Screen>
   );
@@ -113,6 +114,7 @@ function postEditScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
+    backgroundColor:colors.background,
   },
 });
 export default postEditScreen;
