@@ -1,9 +1,6 @@
 import React, { useLayoutEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { AntDesign, SimpleLineIcons } from "@expo/vector-icons";
 
-import Constants from "expo-constants";
 import colors from '../../config/colors';
 import Screen from '../../components/Screen';
 
@@ -19,7 +16,6 @@ function Welcome({ navigation }) {
   return (
     
     <Screen style={styles.outContainer}>
-      <StatusBar style='light'/>
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')}/>
         <Text style={styles.imgText}>Sports Event Organizer</Text>
@@ -44,7 +40,6 @@ function Welcome({ navigation }) {
 
 const styles = StyleSheet.create({
   outContainer: {
-
     alignContent: 'center',
     justifyContent: 'center',
     backgroundColor: colors.black 

@@ -24,7 +24,6 @@ function SignIn({ navigation }) {
   }, [navigation]);
   return (
     <Screen style={styles.outContainer}>
-      <StatusBar style='light' />
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')} />
       </View>
