@@ -1,4 +1,4 @@
-import React, { useState, useLayoutEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -6,7 +6,13 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
+  Alert,
 } from 'react-native';
+
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { AuthContext } from '../../store/auth-context';
+import { createUser } from '../../utility/auth';
+
 import colors from '../../config/colors';
 import Screen from '../../components/Screen';
 
@@ -15,11 +21,30 @@ function SignUp({ navigation }) {
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    })
-  }, [navigation]);
+
+
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  const authCtx = useContext(AuthContext);
+
+  async function signupHandler() {
+    setIsAuthenticating(true);
+    try {
+      const token = await createUser(email, password);
+      authCtx.authenticate(token);
+    } catch (error) {
+      Alert.alert(
+        'Authentication failed',
+        'Could not create user, please check your input and try again later.'
+      );
+      setIsAuthenticating(false);
+    }
+  }
+
+  if (isAuthenticating) {
+    return <LoadingOverlay message="Creating user..." />;
+  }
+
 
   return (
     <Screen style={styles.outContainer}>
@@ -65,7 +90,8 @@ function SignUp({ navigation }) {
         </View>
 
               
-        <TouchableOpacity style={[styles.singIn,styles.shadowOpt]}>
+        <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}
+          onPress={signupHandler}>
           <Text style={styles.singupText}>Sign Up</Text>
         </TouchableOpacity>
 
@@ -95,23 +121,18 @@ function SignUp({ navigation }) {
 
 const styles = StyleSheet.create({
   outContainer: {
-    flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.black,
     padding:6,
   },
 
   imgContainer: {
-    flex: 3,
-    padding: 5,
-    margin: 5,
+    flex: 3.5,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
   },
   lastContainer: {
     alignItems: 'center',
@@ -120,9 +141,9 @@ const styles = StyleSheet.create({
   },
 
   signUp: {
-    fontSize: 20,
+    fontSize: 16,
     color: colors.black,
-    marginVertical: 15,
+    marginVertical: 10,
     fontWeight:'bold',
   },
 

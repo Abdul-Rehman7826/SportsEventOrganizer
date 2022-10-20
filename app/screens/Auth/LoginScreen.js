@@ -1,13 +1,16 @@
-import React, { useState, useLayoutEffect } from 'react';
-import { StatusBar } from 'expo-status-bar';
+import React, { useState,  useContext } from 'react';
 import {
   View,
   Text,
   Image,
   StyleSheet,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { AuthContext } from '../../store/auth-context';
+import { login } from '../../utility/auth';
 
 import Input from '../../components/Input';
 import colors from '../../config/colors';
@@ -17,17 +20,34 @@ function SignIn({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    })
-  }, [navigation]);
+
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  const authCtx = useContext(AuthContext);
+
+  async function loginHandler() {
+    setIsAuthenticating(true);
+    try {
+      const token = await login(email, password);
+      authCtx.authenticate(token);
+    } catch (error) {
+      Alert.alert(
+        'Authentication failed!',
+        'Could not log you in. Please check your credentials or try again later!'
+      );
+      setIsAuthenticating(false);
+    }
+  }
+
+  if (isAuthenticating) {
+    return <LoadingOverlay message="Logging you in..." />;
+  }
   return (
     <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')} />
       </View>
-      <View style={[styles.lastContainer]}>
+      <View style={[styles.lastContainer, styles.shadowOpt]}>
         <Text style={styles.signin}>Sign In</Text>
 
         <View style={{ width: '90%' }}>
@@ -51,7 +71,8 @@ function SignIn({ navigation }) {
           {/* <Text>Forgot Password?</Text> */}
         </TouchableOpacity>
 
-        <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}>
+        <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}
+          onPress={ loginHandler }>
           <Text style={styles.singupText}>Sign In</Text>
         </TouchableOpacity>
 
@@ -78,11 +99,8 @@ function SignIn({ navigation }) {
 
 const styles = StyleSheet.create({
   outContainer: {
-    flex: 1,
     alignContent: 'center',
-    justifyContent:'center',
-    backgroundColor: colors.black,
-    paddingBottom: 10,
+    justifyContent: 'center',
     padding:5,
   },
   image: {
@@ -94,10 +112,9 @@ const styles = StyleSheet.create({
     padding: 5,
     margin: 5,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   lastContainer: {
-    flex:2,
+    flex:2.5,
     alignItems  :'center',
     justifyContent:'center',
     backgroundColor:  colors.light,
@@ -107,7 +124,7 @@ const styles = StyleSheet.create({
   signin: {
     fontSize: 24,
     color: 'black',
-    marginVertical: 15,
+    marginVertical: 10,
     fontWeight:'800',
   },
 
@@ -123,9 +140,8 @@ const styles = StyleSheet.create({
     backgroundColor: colors.black,
     alignItems: 'center',
     justifyContent: 'center',
-    marginVertical: 20,
+    marginVertical: 15,
     borderRadius: 5,
-   
   },
 
   singupText: {

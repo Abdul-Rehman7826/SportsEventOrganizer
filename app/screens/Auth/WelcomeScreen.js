@@ -6,15 +6,7 @@ import Screen from '../../components/Screen';
 
 
 function Welcome({ navigation }) {
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerShown: false,
-    })
-  }, [navigation]);
-
-
-  return (
-    
+  return (    
     <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')}/>
@@ -33,7 +25,6 @@ function Welcome({ navigation }) {
           <Text style={styles.singinText}>Login</Text>
         </TouchableOpacity>
       </View>
-
     </Screen >
   );
 }
@@ -42,7 +33,6 @@ const styles = StyleSheet.create({
   outContainer: {
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.black 
   },
   imgContainer: {
     flex:3,
@@ -59,11 +49,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 35,
     color: 'black',
-    marginVertical: 18,
-    color: colors.white,
+    color: colors.black,
   },
   buttonContainer: {
-    flex: 1.5,
+    flex: 1.8,
     alignItems: 'center',
     justifyContent:'center',
     backgroundColor: colors.light,
@@ -74,7 +63,6 @@ const styles = StyleSheet.create({
   bestText: {
     fontSize: 16,
     color: 'black',
-    marginVertical: 20,
   },
   singUp: {
     width: '80%',

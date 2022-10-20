@@ -1,28 +1,22 @@
 import React from "react";
-import { StyleSheet, View, ImageBackground, Text } from "react-native";
+import { StyleSheet, View,  Text } from "react-native";
 
 import { ListItem} from "../../components/lists";
 import colors from "../../config/colors";
-import Icon from "../../components/Icon";
-// import routes from "../navigation/routes";
 import Screen from "../../components/Screen";
 import Input from "../../components/Input";
 import AppButton from "../../components/Button";
 
 
 function AccountScreen({ navigation }) {
-  // const { user, logOut } = useAuth();
-
   return (
-    <Screen
-      style={styles.outContainer}>
-
+    <View style={styles.outContainer}>
         <View style={[styles.container]}>
           <View style={styles.ProfilePic}>
             <ListItem
               title={'AbdulRehman'}
               subTitle={'@Abdulrehman'}
-              image={require("../assets/abdulrehman.png")}
+              image={require("../../assets/abdulrehman.png")}
               chevron={false}
               imagePicker={true}
               onPress={() => (console.log('Take Pic from galery'))}
@@ -37,20 +31,21 @@ function AccountScreen({ navigation }) {
             <Input label={'Address :'} placeholder='St.# 33 Gujranwala Pakistan' />
 
         <AppButton title={'Save'} width={'50%'} color={colors.black} />
-        </View>
+      </View>
+    </View>
      
-    </Screen>
   );
 }
 const styles = StyleSheet.create({
   outContainer: {
-    flex: 1,
+    flex:1,
     alignContent: 'center',
     justifyContent: 'center',
   },
   container: {
+    flex:1,
     backgroundColor:colors.light,
-    margin:8,
+    margin:5,
     borderRadius: 7,
     padding: 20,    
   },
