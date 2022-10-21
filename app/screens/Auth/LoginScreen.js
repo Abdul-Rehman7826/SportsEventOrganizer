@@ -28,8 +28,8 @@ function SignIn({ navigation }) {
   async function loginHandler() {
     setIsAuthenticating(true);
     try {
-      const token = await login(email, password);
-      authCtx.authenticate(token);
+      const {token,userId} = await login(email, password);
+      authCtx.authenticate(token, userId);
     } catch (error) {
       Alert.alert(
         'Authentication failed!',

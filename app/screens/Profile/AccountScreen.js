@@ -1,17 +1,32 @@
-import React from "react";
-import { StyleSheet, View,  Text } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { StyleSheet, View,  Text, Alert } from "react-native";
 
 import { ListItem} from "../../components/lists";
 import colors from "../../config/colors";
-import Screen from "../../components/Screen";
 import Input from "../../components/Input";
 import AppButton from "../../components/Button";
+import { lookupuser } from "../../utility/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 
 function AccountScreen({ navigation }) {
+
+  const [userId, setUserId] = useState('');
+  
+  useEffect(() => {
+    async function fetchToken() {
+      const storedToken = await AsyncStorage.getItem('token');
+      const storedUserId = await AsyncStorage.getItem('userId');
+     }
+
+    fetchToken();
+  }, []);
+
   return (
+    
     <View style={styles.outContainer}>
-        <View style={[styles.container]}>
+      
+      <View style={[styles.container]}>
           <View style={styles.ProfilePic}>
             <ListItem
               title={'AbdulRehman'}
@@ -32,7 +47,8 @@ function AccountScreen({ navigation }) {
 
         <AppButton title={'Save'} width={'50%'} color={colors.black} />
       </View>
-    </View>
+      </View>
+   
      
   );
 }
