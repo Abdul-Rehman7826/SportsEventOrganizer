@@ -23,7 +23,7 @@ async function signup(email, password, phone, fName) {
     }
   } catch (error) {
     Alert.alert('Authentication error', error.message)
-    return ;
+    return;
   }
 }
 
@@ -37,19 +37,17 @@ async function ulogin(email, password) {
     if (error) {
       throw error;
     } else {
-      const tokenid=data.session.access_token;
+      const tokenid = data.session.access_token;
       return { tokenid };
     }
   } catch (error) {
     Alert.alert('Authentication error', error.message)
-    return ;
+    return;
   }
 }
-
 export function createUser(email, password, phone, fName) {
   return signup(email, password, phone, fName);
 }
-
 export function login(email, password) {
   return ulogin(email, password);
 }

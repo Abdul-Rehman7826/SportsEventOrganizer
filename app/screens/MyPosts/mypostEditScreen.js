@@ -79,7 +79,7 @@ const categories = [
   },
 ];
 
-function postEditScreen() {
+function mypostEditScreen() {
   const location = useLocation();
 
   return (
@@ -105,4 +105,4 @@ const styles = StyleSheet.create({
 
   },
 });
-export default postEditScreen;
+export default mypostEditScreen;
