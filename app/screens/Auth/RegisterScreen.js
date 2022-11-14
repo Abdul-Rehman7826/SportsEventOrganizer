@@ -10,11 +10,11 @@ import {
 } from 'react-native';
 
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
-import { AuthContext } from '../../store/auth-context';
-import { createUser } from '../../utility/auth';
+import { supabase } from '../../lib/supabase';
 
 import colors from '../../config/colors';
 import Screen from '../../components/Screen';
+import { createUser } from '../../api/auth';
 
 function SignUp({ navigation }) {
   const [fName, setFname] = useState();
@@ -22,21 +22,17 @@ function SignUp({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-
-  const authCtx = useContext(AuthContext);
 
   async function signupHandler() {
     setIsAuthenticating(true);
     try {
-      const {token, userId} = await createUser(email, password);
-      authCtx.authenticate(token, userId);
+      const user = await createUser(email, password, phone, fName);
+      if(user)   navigation.navigate('Login');
+
     } catch (error) {
-      Alert.alert(
-        'Authentication failed',
-        'Could not create user, please check your input and try again later.'
-      );
+      Alert.alert('Authentication error', error.message);
+    } finally {
       setIsAuthenticating(false);
     }
   }
@@ -52,7 +48,7 @@ function SignUp({ navigation }) {
         <Image style={styles.image} source={require('../../assets/logo.png')} />
         <Text style={styles.imgText}>Sports Event Organizer</Text>
       </View>
-      <View style={[styles.lastContainer,styles.shadowOpt]}>
+      <View style={[styles.lastContainer, styles.shadowOpt]}>
         <Text style={styles.signUp}>Create Account</Text>
         <View style={styles.inputContainer}>
           <Text style={{ margin: 5 }}>Full Name</Text>
@@ -89,16 +85,16 @@ function SignUp({ navigation }) {
           />
         </View>
 
-              
+
         <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}
           onPress={signupHandler}>
           <Text style={styles.singupText}>Sign Up</Text>
         </TouchableOpacity>
 
 
-        <View style={{flexDirection:'row',marginVertical:10}}>
-        <Text >
-          I'm already a member .
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <Text >
+            I'm already a member .
           </Text>
           <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text
@@ -111,8 +107,8 @@ function SignUp({ navigation }) {
             </Text>
           </TouchableOpacity>
         </View>
-      
-      
+
+
       </View>
     </Screen>
 
@@ -123,7 +119,7 @@ const styles = StyleSheet.create({
   outContainer: {
     alignContent: 'center',
     justifyContent: 'center',
-    padding:6,
+    padding: 6,
   },
 
   imgContainer: {
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     color: colors.black,
     marginVertical: 10,
-    fontWeight:'bold',
+    fontWeight: 'bold',
   },
 
   inputContainer: {
@@ -153,7 +149,7 @@ const styles = StyleSheet.create({
 
   textInput: {
     width: '100%',
-    height:50,
+    height: 50,
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 15,
@@ -177,7 +173,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  shadowOpt:{
+  shadowOpt: {
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,

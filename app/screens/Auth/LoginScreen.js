@@ -9,32 +9,36 @@ import {
 } from 'react-native';
 
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
-import { AuthContext } from '../../store/auth-context';
-import { login } from '../../utility/auth';
-
+ 
 import Input from '../../components/Input';
 import colors from '../../config/colors';
 import Screen from '../../components/Screen';
+import { login } from '../../api/auth';
+import { AuthContext } from '../../store/auth-context';
+
 
 function SignIn({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
 
-
   const [isAuthenticating, setIsAuthenticating] = useState(false);
+
 
   const authCtx = useContext(AuthContext);
 
   async function loginHandler() {
     setIsAuthenticating(true);
     try {
-      const {token,userId} = await login(email, password);
-      authCtx.authenticate(token, userId);
+      const {tokenid} = await login(email, password);
+      if (tokenid) {
+        authCtx.authenticate(tokenid);
+      }
     } catch (error) {
       Alert.alert(
         'Authentication failed!',
         'Could not log you in. Please check your credentials or try again later!'
       );
+    } finally {
       setIsAuthenticating(false);
     }
   }
@@ -43,7 +47,8 @@ function SignIn({ navigation }) {
     return <LoadingOverlay message="Logging you in..." />;
   }
   return (
-    <Screen style={styles.outContainer}>
+  
+      <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')} />
       </View>
@@ -92,8 +97,9 @@ function SignIn({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
+      </Screen>
+  
 
-    </Screen>
   );
 }
 

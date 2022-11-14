@@ -1,36 +1,40 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
-
+import * as SecureStorage from 'expo-secure-store';
 import { createContext,  useState } from 'react';
+import { supabase } from '../lib/supabase';
+
 
 export const AuthContext = createContext({
-  token: '',
-  userId:'',
+  tokenid:'',
   isAuthenticated: false,
-  authenticate: (token,userId) => {},
+  authenticate: (tokenid) => {},
   logout: () => {},
 });
 
 function AuthContextProvider({ children }) {
-  const [authToken, setAuthToken] = useState();
-  const [userId, setUserId] = useState();
+  const [authtokenid, setAuthtokenid] = useState();
 
-  function authenticate(token,userId) {
-    setAuthToken(token);
-    setUserId(userId);
-    AsyncStorage.setItem('token', token);
-    AsyncStorage.setItem('userId', userId);
+  async function authenticate(tokenid) {
+    try {
+      await SecureStorage.setItemAsync('tokenid', tokenid);
+      setAuthtokenid(tokenid);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function logout() {
-    setAuthToken(null);
-    AsyncStorage.removeItem('token');
-    AsyncStorage.removeItem('userId');
+  async function logout() {
+    try {
+      let { error } = await supabase.auth.signOut();
+      setAuthtokenid(null);
+      SecureStorage.deleteItemAsync('tokenid');
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   const value = {
-    token: authToken,
-    userId: userId,
-    isAuthenticated: (!!authToken) && (!!userId),
+    tokenid: authtokenid,
+    isAuthenticated: (!!authtokenid),
     authenticate: authenticate,
     logout: logout,
   };

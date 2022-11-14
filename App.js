@@ -2,14 +2,15 @@ import { useContext, useEffect, useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import * as SecureStorage from 'expo-secure-store';
 import AppLoading from 'expo-app-loading';
-
+import {supabase } from './app/lib/supabase'
 import AuthNavigation  from './app/Navigation/AuthNavigation';
 import AccountScreen from './app/screens/Profile/AccountScreen';
 import AuthContextProvider, { AuthContext } from './app/store/auth-context';
 import colors from './app/config/colors';
 import IconButton from './app/components/ui/IconButton';
+import postNavigation from './app/Navigation/postNavigation';
 
 const Stack = createStackNavigator();
 
@@ -47,7 +48,7 @@ function Navigation() {
   return (
     <NavigationContainer>
       {!authCtx.isAuthenticated && <AuthNavigation />}
-      {authCtx.isAuthenticated && <AuthenticatedStack />}
+      {authCtx.isAuthenticated && <postNavigation />}
     </NavigationContainer>
   );
 }
@@ -59,16 +60,13 @@ function Root() {
   const authCtx = useContext(AuthContext);
 
   useEffect(() => {
-    async function fetchToken() {
-      const storedToken = await AsyncStorage.getItem('token');
-      const storedUserId = await AsyncStorage.getItem('userId');
-      if (storedToken) {
-        authCtx.authenticate(storedToken, storedUserId);
+      async function fetchToken() {
+        const storedToken = await SecureStorage.getItemAsync('tokenid');
+        if (storedToken) {
+          authCtx.authenticate(storedToken);
+        }
+        setIsTryingLogin(false);
       }
-
-      setIsTryingLogin(false);
-    }
-
     fetchToken();
   }, []);
 

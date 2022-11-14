@@ -13,7 +13,7 @@ const AuthNavigation = () => {
                 contentStyle: { backgroundColor: colors.primary100 },
             }}
         >
-            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={ { title:''} } />
             <Stack.Screen name="Registeration" component={RegisterScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>

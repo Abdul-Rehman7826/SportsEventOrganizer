@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet } from "react-native";
+import * as Yup from "yup";
 
 import {
   Form,
   FormField,
   FormPicker as Picker,
   SubmitButton,
-} from "../../components/forms";
-import CategoryPickerItem from "../../components/CategoryPickerItem";
-import Screen from "../../components/Screen";
-import colors from "../../config/colors";
+} from "../components/forms";
+import CategoryPickerItem from "../components/CategoryPickerItem";
+import Screen from "../components/Screen";
+import FormImagePicker from "../components/forms/FormImagePicker";
+import listingsApi from "../api/listings";
+import useLocation from "../hooks/useLocation";
+import UploadScreen from "../UploadScreen";
+import { View } from "react-native-web";
 
-
+const validationSchema = Yup.object().shape({
+  title: Yup.string().required().min(1).label("Title"),
+  description: Yup.string().label("Description"),
+  category: Yup.object().required().nullable().label("Category"),
+  images: Yup.array().min(1, "Please select at least one image."),
+});
 
 const categories = [
   {
@@ -71,42 +81,13 @@ const categories = [
 ];
 
 function postEditScreen() {
+  const location = useLocation();
+
   return (
     <Screen style={styles.container}>
-      <Form
-        initialValues={{
-          title: "",
-          price: "",
-          description: "",
-          category: null,
-        }}
-        
-      >
-        <FormField maxLength={255} name="title" placeholder="Title" />
-        <FormField
-          keyboardType="numeric"
-          maxLength={8}
-          name="price"
-          placeholder="Price"
-          width={120}
-        />
-        <Picker
-          items={categories}
-          name="category"
-          numberOfColumns={3}
-          PickerItemComponent={CategoryPickerItem}
-          placeholder="Category"
-          width="50%"
-        />
-        <FormField
-          maxLength={255}
-          multiline
-          name="description"
-          numberOfLines={3}
-          placeholder="Description"
-        />
-        <SubmitButton  title="Post" />
-      </Form>
+      <View style={styles.imageContainer}></View>
+      <View style={styles.Inputcontainer}></View>
+      <View style={styles.buttoncontainer}></View>
     </Screen>
   );
 }
@@ -114,7 +95,15 @@ function postEditScreen() {
 const styles = StyleSheet.create({
   container: {
     padding: 10,
-    backgroundColor:colors.background,
+  },
+  imageContainer: {
+
+  },
+  Inputcontainer: {
+
+  },
+  buttoncontainer: {
+
   },
 });
 export default postEditScreen;

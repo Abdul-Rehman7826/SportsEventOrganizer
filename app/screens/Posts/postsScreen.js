@@ -2,7 +2,6 @@ import React from "react";
 import {  StyleSheet, View } from "react-native";
 
 import Card from "../../components/Card";
-import colors from "../../config/colors";
 import Screen from "../../components/Screen";
 import { ScrollView } from "react-native-gesture-handler";
 
@@ -34,8 +33,7 @@ function postsScreen(props) {
 
 const styles = StyleSheet.create({
   outContainer: {
-    margin: 5,
-    backgroundColor:colors.background,
+    margin: 5
   },
 });
 
