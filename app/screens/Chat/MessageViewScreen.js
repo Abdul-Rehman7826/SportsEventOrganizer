@@ -7,28 +7,28 @@ import { ListItem } from '../../components/lists';
 
 const MessageViewScreen = () => {
     const data = [
-        {},{}
+        {}, {}
     ]
-  return (
-      <Screen>
-              <View style={styles.container}>
-                  <ListItem
-                      title={'AbdulRehman'}
-                      image={require('../assets/usman.jpeg')}
-                  chevron={false}
-                  />
-                  <View style={styles.footer}>
-                      <TextInput
-                          placeholder="Message"
-                          style={styles.textInput}
-                      />
-                      <TouchableOpacity onPress={() => (console.log(''))} activeOpacity={0.5}>
-                          <MaterialCommunityIcons name="send" size={30} color={colors.black}  />
-                      </TouchableOpacity>
-                  </View>
-              </View>
-      </Screen>
-  )
+    return (
+        <Screen>
+            <View style={styles.container}>
+                <ListItem
+                    title={'AbdulRehman'}
+                    image={require('../../assets/usman.jpeg')}
+                    chevron={false}
+                />
+                <View style={styles.footer}>
+                    <TextInput
+                        placeholder="Message"
+                        style={styles.textInput}
+                    />
+                    <TouchableOpacity onPress={() => (console.log(''))} activeOpacity={0.5}>
+                        <MaterialCommunityIcons name="send" size={30} color={colors.black} />
+                    </TouchableOpacity>
+                </View>
+            </View>
+        </Screen>
+    )
 }
 
 export default MessageViewScreen
@@ -72,10 +72,10 @@ const styles = StyleSheet.create({
         borderColor: "transparent",
         backgroundColor: colors.white,
         borderWidth: 1,
-        borderColor:colors.black,
+        borderColor: colors.black,
         padding: 10,
         color: "gray",
-        borderRadius:20,
+        borderRadius: 20,
     },
 
     senderText: {

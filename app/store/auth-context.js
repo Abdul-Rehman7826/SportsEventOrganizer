@@ -1,13 +1,13 @@
 import * as SecureStorage from 'expo-secure-store';
-import { createContext,  useState } from 'react';
+import { createContext, useState } from 'react';
 import { supabase } from '../lib/supabase';
 
 
 export const AuthContext = createContext({
-  tokenid:'',
+  tokenid: '',
   isAuthenticated: false,
-  authenticate: (tokenid) => {},
-  logout: () => {},
+  authenticate: (tokenid) => { },
+  logout: () => { },
 });
 
 function AuthContextProvider({ children }) {
@@ -24,9 +24,10 @@ function AuthContextProvider({ children }) {
 
   async function logout() {
     try {
+      console.log('logout-----------');
       let { error } = await supabase.auth.signOut();
       setAuthtokenid(null);
-      SecureStorage.deleteItemAsync('tokenid');
+      await SecureStorage.deleteItemAsync('tokenid');
     } catch (error) {
       console.log(error);
     }

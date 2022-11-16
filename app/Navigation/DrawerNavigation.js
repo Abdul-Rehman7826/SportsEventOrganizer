@@ -1,36 +1,25 @@
 import 'react-native-gesture-handler';
-
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { ImageBackground, View, Text, TouchableOpacity, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, ImageBackground, View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
 import { Feather, MaterialCommunityIcons, AntDesign } from 'react-native-vector-icons';
 import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import colors from '../config/colors';
 import Posts from './postNavigation';
 import MyPosts from './mypostNavigation';
 import Chat from './chatNavigation';
+import Profile from './profileNavigation';
 import Team from './teamNavigation';
+
 import { AuthContext } from '../store/auth-context';
 
 const Drawer = createDrawerNavigator();
-const authCtx = useContext(AuthContext);
 
 function DrawerNavigation() {
     return (
-        <Drawer.Navigator
-            drawerContentOptions={{
-                activeTintColor: 'white',
-                activeBackgroundColor: colors.primary500
-            }}
-
-            drawerContent={(props) => <CustomDrawer {...props} />}
-            screenOptions={{
-                headerShown: false
-            }}
-        >
+        <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
             <Drawer.Screen
                 name="Posts"
-
                 options={{
                     drawerIcon: ({ color, size }) => (
                         <Feather name="home" color={color} size={size} style={{ padding: 2 }} />
@@ -51,11 +40,21 @@ function DrawerNavigation() {
                 name="Chat"
                 options={{
                     drawerIcon: ({ color, size }) => (
-                        <MaterialCommunityIcons name="messages" size={size} color={color} />
+                        <MaterialCommunityIcons name="message" size={size} color={color} />
                     ),
                     drawerLabel: 'Messages'
                 }}
                 component={Chat} />
+            <Drawer.Screen
+                name="Profile"
+                options={{
+                    drawerIcon: ({ color, size }) => (
+                        <MaterialCommunityIcons name="account" size={size} color={color} />
+                    ),
+                    drawerLabel: 'Profile'
+                }}
+                component={Profile} />
+
             <Drawer.Screen
                 name="Team"
                 options={{
@@ -71,19 +70,18 @@ function DrawerNavigation() {
 }
 
 function CustomDrawer({ ...props }) {
+    const authCtx = React.useContext(AuthContext);
     return (
-        <DrawerContentScrollView {...props} >
+        <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} translucent={false} />
-            <ImageBackground blurRadius={15} source={require('./assets/beach.jpg')} style={{ width: "100%", height: 210, marginTop: -5, marginBottom: 5, }} >
+            <ImageBackground blurRadius={15} source={require('../assets/beach.jpg')} style={{ width: "100%", height: 210, marginTop: -5, marginBottom: 5, }} >
                 <View style={{ justifyContent: 'center', alignContent: 'center', flex: 1, alignItems: 'center' }}>
-                    <Image source={require('./assets/dpIcon.png')} style={{ width: 80, height: 80, borderRadius: 50, }} />
+                    <Image source={require('../assets/dpIcon.png')} style={{ width: 80, height: 80, borderRadius: 50, }} />
                     <Text style={{ color: 'white', }}>Harry Potter</Text>
                 </View>
             </ImageBackground>
-
-            <DrawerItemList {...props} />
-
-            <TouchableOpacity onPress={() => { authCtx.logout() }}>
+            <DrawerContentScrollView {...props} >
+                <DrawerItemList {...props} />
                 <DrawerItem
                     label="Log-out"
                     icon={({ color, size }) =>
@@ -92,10 +90,14 @@ function CustomDrawer({ ...props }) {
                             size={size}
                             name={'log-out'} />
                     }
+                    onPress={() => authCtx.logout()}
                 />
-            </TouchableOpacity>
 
-        </DrawerContentScrollView>
+            </DrawerContentScrollView>
+            <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
+                Sports Event Organizer
+            </Text>
+        </SafeAreaView>
 
     );
 }

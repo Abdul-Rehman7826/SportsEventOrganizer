@@ -29,6 +29,7 @@ function Root() {
       const storedToken = await SecureStorage.getItemAsync('tokenid');
       if (storedToken) {
         authCtx.authenticate(storedToken);
+        console.log(storedToken);
       }
       setIsTryingLogin(false);
     }

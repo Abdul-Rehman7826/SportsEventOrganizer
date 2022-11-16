@@ -8,16 +8,20 @@ const AuthNavigation = () => {
     return (
         <Stack.Navigator
             screenOptions={{
-                headerStyle: { backgroundColor: colors.primary500 },
-                headerTintColor: 'white',
-                contentStyle: { backgroundColor: colors.primary100 },
+                headerStyle: {
+                    backgroundColor: colors.primary500,
+                },
+                headerTintColor: '#fff',
+                headerTitleStyle: {
+                    fontWeight: 'bold',
+                },
             }}
         >
-            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={ { title:''} } />
+            <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} options={{ title: '' }} />
             <Stack.Screen name="Registeration" component={RegisterScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
         </Stack.Navigator>
-        )
+    )
 }
 
 export default AuthNavigation;

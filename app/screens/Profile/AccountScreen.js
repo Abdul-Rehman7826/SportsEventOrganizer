@@ -1,7 +1,6 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Alert, Pressable, Keyboard, TouchableOpacity } from "react-native";
 import { BottomSheet } from 'react-native-btr'
-import jwt_decode from "jwt-decode";
 
 import { ListItem } from "../../components/lists";
 import colors from "../../config/colors";
@@ -188,4 +187,5 @@ const styles = StyleSheet.create({
   },
 
 });
+
 export default AccountScreen;
