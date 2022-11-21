@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, Text, TouchableOpacity, View, TextInput } from "react-native";
+import Input from "../../components/Input";
 
 import Screen from "../../components/Screen";
+import colors from "../../config/colors";
 import useLocation from "../../hooks/useLocation";
-
-
 
 const categories = [
   {
@@ -64,13 +64,55 @@ const categories = [
 ];
 
 function postEditScreen() {
-  // const location = useLocation();
+  const location = useLocation();
+  const [eventTitle, setEventTitle] = useState();
+  const [category, setCategory] = useState();
+  const [eventDate, setEventDate] = useState();
+  const [imageUrl, setImageurl] = useState();
+  const [description, setDescription] = useState();
+  const [imageKey, setImageKey] = useState();
+
+
+  console.log("Erorr :: ", supabase.auth.getUser()?.id);
 
   return (
     <Screen style={styles.container}>
-      <View style={styles.imageContainer}></View>
-      <View style={styles.Inputcontainer}></View>
-      <View style={styles.buttoncontainer}></View>
+      <View style={styles.imageContainer}>
+      </View>
+      <View style={styles.Inputcontainer}>
+        <Input
+          id='title'
+          label={'Title'}
+          placeholder={'Enter Title'}
+          value={eventTitle}
+          onChange={(text) => setEventTitle(text)}
+        />
+        <View style={{ borderWidth: 1, marginVertical: 5, borderRadius: 5, borderColor: colors.primary500 }} >
+
+          <TextInput
+            id='description'
+            multiline
+            numberOfLines={4}
+            placeholder={'Enter Description'}
+            placeholderTextColor={colors.primary500}
+            value={description}
+            onChange={(text) => setDescription(text)}
+            style={{ backgroundColor: colors.white, borderRadius: 5, }}
+          />
+        </View>
+      </View>
+      <View style={{ flexDirection: 'row', justifyContent: 'space-around' }} >
+        <TouchableOpacity
+          style={[styles.cancel, styles.shadowOpt]}
+          onPress={() => null}>
+          <Text style={styles.cancelText}>cancel</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.save, styles.shadowOpt]}
+          onPress={() => null}>
+          <Text style={styles.saveText}>save</Text>
+        </TouchableOpacity>
+      </View>
     </Screen>
   );
 }
@@ -87,6 +129,45 @@ const styles = StyleSheet.create({
   },
   buttoncontainer: {
 
+  },
+
+  save: {
+    width: '30%',
+    height: 40,
+    backgroundColor: colors.primary500,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    borderRadius: 5,
+  },
+  saveText: {
+    color: 'white',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  cancel: {
+    width: '30%',
+    height: 40,
+    backgroundColor: colors.white,
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginVertical: 20,
+    borderRadius: 5,
+  },
+  cancelText: {
+    color: 'black',
+    fontWeight: 'bold',
+    textTransform: 'uppercase',
+  },
+  shadowOpt: {
+    shadowColor: colors.black,
+    shadowOffset: {
+      width: 0,
+      height: 3,
+    },
+    shadowOpacity: 0.27,
+    shadowRadius: 4.65,
+    elevation: 6,
   },
 });
 export default postEditScreen;

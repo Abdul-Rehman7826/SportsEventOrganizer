@@ -17,7 +17,14 @@ const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
     return (
-        <Drawer.Navigator drawerContent={(props) => <CustomDrawer {...props} />}>
+        <Drawer.Navigator
+            drawerContentOptions={{
+                activeTintColor: colors.white,
+                activeBackgroundColor: colors.primary500,
+                itemStyle: { marginVertical: 5 },
+            }}
+            drawerPosition={'right'}
+            drawerContent={(props) => <CustomDrawer {...props} />}>
             <Drawer.Screen
                 name="Posts"
                 options={{
@@ -94,7 +101,7 @@ function CustomDrawer({ ...props }) {
                 />
 
             </DrawerContentScrollView>
-            <Text style={{ fontSize: 16, textAlign: 'center', color: 'grey' }}>
+            <Text style={{ color: colors.primary100, fontSize: 16, margin: 10, textAlign: 'center', color: 'grey' }}>
                 Sports Event Organizer
             </Text>
         </SafeAreaView>

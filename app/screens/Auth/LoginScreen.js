@@ -1,4 +1,4 @@
-import React, { useState,  useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import {
   View,
   Text,
@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 
 import LoadingOverlay from '../../components/ui/LoadingOverlay';
- 
+
 import Input from '../../components/Input';
 import colors from '../../config/colors';
 import Screen from '../../components/Screen';
@@ -20,16 +20,13 @@ import { AuthContext } from '../../store/auth-context';
 function SignIn({ navigation }) {
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
-
   const [isAuthenticating, setIsAuthenticating] = useState(false);
-
-
   const authCtx = useContext(AuthContext);
 
   async function loginHandler() {
     setIsAuthenticating(true);
     try {
-      const {tokenid} = await login(email, password);
+      const { tokenid } = await login(email, password);
       if (tokenid) {
         authCtx.authenticate(tokenid);
       }
@@ -47,8 +44,8 @@ function SignIn({ navigation }) {
     return <LoadingOverlay message="Logging you in..." />;
   }
   return (
-  
-      <Screen style={styles.outContainer}>
+
+    <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
         <Image style={styles.image} source={require('../../assets/logo.png')} />
       </View>
@@ -73,11 +70,11 @@ function SignIn({ navigation }) {
           />
         </View>
         <TouchableOpacity style={styles.Fpassword}>
-          {/* <Text>Forgot Password?</Text> */}
+          <Text>Forgot Password?</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}
-          onPress={ loginHandler }>
+          onPress={loginHandler}>
           <Text style={styles.singupText}>Sign In</Text>
         </TouchableOpacity>
 
@@ -97,9 +94,7 @@ function SignIn({ navigation }) {
           </TouchableOpacity>
         </View>
       </View>
-      </Screen>
-  
-
+    </Screen>
   );
 }
 
@@ -107,23 +102,19 @@ const styles = StyleSheet.create({
   outContainer: {
     alignContent: 'center',
     justifyContent: 'center',
-    padding:5,
+    padding: 5,
   },
   image: {
     width: 200,
     height: 200,
   },
   imgContainer: {
-    flex: 1.5,
-    padding: 5,
-    margin: 5,
     alignItems: 'center',
   },
   lastContainer: {
-    flex:2.5,
-    alignItems  :'center',
-    justifyContent:'center',
-    backgroundColor:  colors.light,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: colors.light,
     borderRadius: 7,
   },
 
@@ -131,7 +122,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: 'black',
     marginVertical: 10,
-    fontWeight:'800',
+    fontWeight: '800',
   },
 
   Fpassword: {
@@ -154,7 +145,7 @@ const styles = StyleSheet.create({
     color: 'white',
     fontWeight: 'bold',
   },
-  shadowOpt:{
+  shadowOpt: {
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,

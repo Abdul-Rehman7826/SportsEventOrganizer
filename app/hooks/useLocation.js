@@ -6,14 +6,14 @@ export default useLocation = () => {
 
   const getLocation = async () => {
     try {
-      const { granted } = await Location.requestPermissionsAsync();
+      const { granted } = await Location.requestForegroundPermissionsAsync()
       if (!granted) return;
       const {
         coords: { latitude, longitude },
       } = await Location.getLastKnownPositionAsync();
       setLocation({ latitude, longitude });
     } catch (error) {
-      console.log(error);
+      console.log(" error in location ", error);
     }
   };
 
