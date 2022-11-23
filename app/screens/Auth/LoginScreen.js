@@ -54,10 +54,13 @@ function SignIn({ navigation }) {
 
         <View style={{ width: '90%' }}>
           <Input
+            autoCapitalize='none'
             label={'Email Address'}
             value={email}
             onChangeText={setEmail}
             placeholder={'Enter your email'}
+            keyboardType='email-address'
+
           />
         </View>
         <View style={{ width: '90%' }}>

@@ -1,6 +1,5 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import NavigationDrawerStructure from './NavigationDrawerStructure';
 
 import profile from '../screens/Profile/AccountScreen';
 import colors from '../config/colors';

@@ -1,29 +1,77 @@
-import React from 'react'
-import { ImageBackground, StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
+import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
+import { StyleSheet, Text, TextInput, View, TouchableOpacity } from 'react-native'
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import Screen from '../../components/Screen'
 import colors from "../../config/colors";
-import { ListItem } from '../../components/lists';
 
-const MessageViewScreen = () => {
-    const data = [
-        {}, {}
-    ]
+import { supabase } from '../../lib/supabase';
+import { AuthContext } from '../../store/auth-context';
+
+const MessageViewScreen = ({ route, navigation }) => {
+    const authCtx = useContext(AuthContext);
+    const { item } = route.params;
+    const [chat_list_id, setChat_List_Id] = useState();
+    const [sender_id, setSender_id] = useState();
+    const [text, setText] = useState();
+
+    useLayoutEffect(() => {
+        navigation.setOptions({
+            title: item.eventTitle,
+        });
+
+    }, []);
+    useEffect(() => {
+
+        const load = async () => {
+            try {
+                const { data: { user } } = await supabase.auth.getUser();
+                setSender_id(user.id);
+                let { data: ChatList, error } = await supabase
+                    .from('ChatList')
+                    .select('*')
+                    .eq('event_id', item.id)
+                    .eq('owner_ch_id', user.id);
+
+                if (!error) {
+                    if (ChatList.length == 0) {
+                        const { data, error } = await supabase
+                            .from('ChatList')
+                            .insert([
+                                {
+                                    owner_ch_id: user.id,
+                                    event_id: item.id
+                                },
+                            ]).select();
+                        if (error) throw error
+                        if (!error) {
+                            setChat_List_Id(data[0].id);
+                            console.log("ChatList ID:: ", data[0].id);
+                        }
+                    } else {
+                        setChat_List_Id(ChatList[0].id);
+                        console.log("ChatList ID:: ", ChatList[0].id);
+                    }
+                }
+                if (error) throw error
+            } catch (error) {
+                console.log(error);
+            }
+        };
+        load();
+    }, [item]);
     return (
         <Screen>
             <View style={styles.container}>
-                <ListItem
-                    title={'AbdulRehman'}
-                    image={require('../../assets/usman.jpeg')}
-                    chevron={false}
-                />
+                <Text>{item.eventTitle}</Text>
                 <View style={styles.footer}>
                     <TextInput
+                        value={text}
+                        onChangeText={(t) => { setText(t) }}
                         placeholder="Message"
                         style={styles.textInput}
                     />
-                    <TouchableOpacity onPress={() => (console.log(''))} activeOpacity={0.5}>
-                        <MaterialCommunityIcons name="send" size={30} color={colors.black} />
+                    <TouchableOpacity disabled={text.length == 0} onPress={() => null} activeOpacity={0.5}>
+                        <MaterialCommunityIcons name="send" size={40} color={colors.primary500} />
                     </TouchableOpacity>
                 </View>
             </View>

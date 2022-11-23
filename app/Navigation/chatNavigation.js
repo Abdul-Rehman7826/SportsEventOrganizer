@@ -9,7 +9,6 @@ const Stack = createStackNavigator();
 const chatNavigation = ({ navigation }) => {
   return (
     <Stack.Navigator
-      mode="modal"
       screenOptions={{
         headerStyle: {
           backgroundColor: colors.primary500,

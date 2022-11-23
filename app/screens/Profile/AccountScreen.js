@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View, Text, Alert, Pressable, Keyboard, TouchableOpacity } from "react-native";
-import { BottomSheet } from 'react-native-btr'
+import { BottomSheet } from 'react-native-btr';
+import * as ImagePicker from "expo-image-picker";
 
 import { ListItem } from "../../components/lists";
 import colors from "../../config/colors";
@@ -11,14 +12,15 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 
 import { supabase } from "../../lib/supabase";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
+import Screen from "../../components/Screen";
 
 function AccountScreen({ navigation }) {
   const [loading, setLoading] = useState();
   const [fname, setFname] = useState();
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
-  const [address, setAddress] = useState();
   const [avatar_url, setAvatar_url] = useState();
+  const [imaget, setImaget] = useState();
 
   const [visible, setVisible] = useState(false);
 
@@ -26,10 +28,75 @@ function AccountScreen({ navigation }) {
     setVisible(!visible);
 
   };
+  const uploadeBucket = async () => {
+    const ext = imaget.uri.split('.').pop();
+    const filename = imaget.uri.replace(/^.*[\\\/]/, "");
+    // console.log(imaget);
+    var formData = new FormData();
+    formData.append("files", {
+      uri: imaget.uri,
+      name: filename,
+      type: `${imaget.type}/${ext}`
+    })
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.storage
+        .from('avatars')
+        .upload(`_${Math.floor(Math.random() * 100) + 1}_avatar.${ext}`, formData);
+      // console.log(error);
+      if (!error) setAvatar_url(`https://utvogrvlrqwaunjqpryp.supabase.co/storage/v1/object/public/avatars/${data.path}`);
+    } catch (error) {
+      Alert.alert('Image Upload error', error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+  const takePicture = async () => {
+    toggleBottomNavigationView();
+    try {
+      let photo = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+      if (!photo.cancelled) {
+        setImaget(photo);
+        uploadeBucket();
+      }
+    } catch (e) {
+      console.log(e);
+    }
+
+  };
+
+  const pickImage = async () => {
+    toggleBottomNavigationView();
+    try {
+      let photo = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!photo.cancelled) {
+        setImaget(photo);
+        uploadeBucket();
+      }
+
+
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
   const getProfile = async () => {
     try {
       setLoading(true)
       const { data: { user } } = await supabase.auth.getUser();
+      console.log('user id :: ', user.id);
       let { data, error, status } = await supabase
         .from('profiles')
         .select(`*`)
@@ -40,7 +107,6 @@ function AccountScreen({ navigation }) {
         setFname(data.full_name);
         setPhone(data.phone);
         setEmail(data.email);
-        setAddress(data.address);
         setAvatar_url(data.avatar_url);
       }
 
@@ -53,11 +119,18 @@ function AccountScreen({ navigation }) {
   const UpdateProfile = async () => {
     try {
       setLoading(true)
+
       const { data: { user } } = await supabase.auth.getUser();
+
       const { error } = await supabase
         .from('profiles')
-        .update({ address: address })
-        .eq('id', user.id)
+        .upsert({
+          id: user.id,
+          full_name: fname,
+          email: email,
+          phone: phone,
+          avatar_url: avatar_url
+        });
       if (error) throw error
       console.log("after updateing");
     } catch (error) {
@@ -68,42 +141,53 @@ function AccountScreen({ navigation }) {
     }
   }
   useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (!status === 'granted') Alert.alert("Cannot access the MediaLibrary !");
+    })();
+    (async () => {
+      const { status } = await ImagePicker.requestCameraPermissionsAsync();
+      if (!status === 'granted') Alert.alert("Cannot access the Camera !");;
+    })();
     getProfile();
-  }, [])
+  }, [navigation])
 
   if (loading)
     return <LoadingOverlay message={'Loading...'} />
 
   return (
-    <>
+    <Screen>
       <View style={styles.outContainer}>
         <View style={[styles.container]}>
           <View style={styles.ProfilePic}>
             <ListItem
               title={fname}
-              subTitle={email}
+              // subTitle={email}
               image={{ uri: avatar_url }}
-              //image={require("../../assets/abdulrehman.png")} 
-
               chevron={false}
               imagePicker={true}
               onPress={toggleBottomNavigationView}
               backgroundColor={colors.light}
             />
           </View>
+
           <Text style={{ marginTop: 30, fontSize: 24, fontWeight: '700' }}>My Profile</Text>
 
           <Input label={'Name :'}
             value={fname}
-            onchange={(text) => { setFname(text) }} />
+            onchange={(t) => setFname(t)}
+          />
           <Input label={'Email :'}
+            keyboardType='email-address'
             value={email}
-            onchange={(text) => { setPhone(email) }} />
+            onchange={(text) => { setPhone(text) }}
+          />
           <Input label={'Phone :'}
+            keyboardType='phone-pad'
             value={phone}
-            onchange={(text) => { setPhone(text) }} />
+            onchange={(text) => { setPhone(text) }}
 
-
+          />
           <AppButton onPress={UpdateProfile} title={'Save'} width={'50%'} color={colors.black} />
         </View>
       </View>
@@ -120,19 +204,19 @@ function AccountScreen({ navigation }) {
             </Pressable>
           </View>
           <View style={styles.btnContaner}>
-            <TouchableOpacity style={[styles.btnImgBS, styles.shadowOpt]}>
+            <TouchableOpacity onPress={takePicture} style={[styles.btnImgBS, styles.shadowOpt]}>
               <AntDesign name='camera' size={30} color={colors.white} />
               <Text style={{ color: colors.white }}>Camera</Text>
             </TouchableOpacity>
             <Text style={{ fontSize: 20, fontWeight: 'bold', color: colors.primary500 }}>OR</Text>
-            <TouchableOpacity style={[styles.btnImgBS, styles.shadowOpt]}>
+            <TouchableOpacity onPress={pickImage} style={[styles.btnImgBS, styles.shadowOpt]}>
               <Entypo name='folder-images' size={30} color={colors.white} />
               <Text style={{ color: colors.white }}>Gallery</Text>
             </TouchableOpacity>
           </View>
         </View>
       </BottomSheet>
-    </>
+    </Screen>
 
   );
 }

@@ -16,41 +16,41 @@ function ListItem({
   renderRightActions,
   chevron = true,
   imagePicker = false,
- ...Props
+  ...Props
 }) {
   return (
-  <GestureHandlerRootView>
-    <Swipeable renderRightActions={renderRightActions}>
-      <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
-          <View style={[styles.container, {...Props}]}>
-          {IconComponent}
-          {image && <Image style={styles.image} source={image} />}
-          <View style={styles.detailsContainer}>
-            <Text style={styles.title} numberOfLines={1}>
-              {title}
-            </Text>
-            {subTitle && (
-              <Text style={styles.subTitle} numberOfLines={2}>
-                {subTitle}
+    <GestureHandlerRootView>
+      <Swipeable renderRightActions={renderRightActions}>
+        <TouchableHighlight underlayColor={colors.light} onPress={onPress}>
+          <View style={[styles.container, { ...Props }]}>
+            {IconComponent}
+            {image && <Image style={styles.image} source={image} />}
+            <View style={styles.detailsContainer}>
+              <Text style={styles.title} numberOfLines={1}>
+                {title}
               </Text>
-            )}
-          </View>
-          {chevron && <MaterialCommunityIcons
-            color={colors.medium}
-            name="chevron-right"
-            size={25}
+              {subTitle && (
+                <Text style={styles.subTitle} numberOfLines={2}>
+                  {subTitle}
+                </Text>
+              )}
+            </View>
+            {chevron && <MaterialCommunityIcons
+              color={colors.medium}
+              name="chevron-right"
+              size={25}
             />}
-            {imagePicker && 
+            {imagePicker &&
               <TouchableHighlight onPress={onPress}>
                 <MaterialCommunityIcons
                   color={colors.black}
                   name="camera"
-                  size={28}/>
+                  size={28} />
               </TouchableHighlight>
             }
-        </View>
-      </TouchableHighlight>
-    </Swipeable>
+          </View>
+        </TouchableHighlight>
+      </Swipeable>
     </GestureHandlerRootView>
   );
 }
@@ -72,13 +72,16 @@ const styles = StyleSheet.create({
     height: 70,
     borderRadius: 35,
     borderWidth: 1,
-    borderColor:colors.black,
+    borderColor: colors.black,
   },
   subTitle: {
+    fontSize: 15,
+    fontWeight: 'bold',
     color: colors.medium,
   },
   title: {
-    fontWeight: "500",
+    fontSize: 20,
+    fontWeight: "bold",
   },
 });
 

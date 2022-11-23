@@ -1,23 +1,35 @@
-import React from "react";
-import { View, Image, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
 
 import colors from "../../config/colors";
-import ListItem from "../../components/lists/ListItem";
 import Text from "../../components/Text";
+import AppButton from "../../components/Button";
+import { AuthContext } from '../../store/auth-context';
 
-function postDetailsScreen(props) {
+function postDetailsScreen({ route, navigation }) {
+  const authCtx = useContext(AuthContext);
+  const { item } = route.params;
+  const MakeChat = () => {
+    navigation.navigate('Chat', { screen: 'MessageViewScreen', params: { item: item }, });
+  };
   return (
     <View>
-      <Image style={styles.image} source={require("../../assets/jacket1.png")} />
+      <Image style={styles.image} source={{ uri: item.imageUrl }} />
       <View style={styles.detailsContainer}>
-        <Text style={styles.title}>Red jacket for sale</Text>
-        <Text style={styles.price}>$100</Text>
+        <Text style={styles.title}>{item.eventTitle}</Text>
+        <View >
+          <Text style={styles.textS}>{item.category}</Text>
+        </View>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.light }}>Event Date : </Text>
+        <Text style={styles.textS}>{item.eventDate}</Text>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.light }}>Description : </Text>
+        <Text style={styles.textD}>{item.description}</Text>
         <View style={styles.userContainer}>
-          <ListItem
-            image={require("../../assets/ahmad1.png")}
-            title="Ahmad Al-Amin"
-            subTitle="5 Listings"
-          />
+          {item.user_id != authCtx.user?.id &&
+
+            <AppButton title={'Message'} color={colors.primary500} onPress={MakeChat} />
+          }
+
         </View>
       </View>
     </View>
@@ -32,18 +44,31 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 300,
   },
-  price: {
+  textS: {
     color: colors.secondary,
     fontWeight: "bold",
     fontSize: 20,
     marginVertical: 10,
   },
+  textC: {
+    backgroundColor: colors.light,
+  },
   title: {
     fontSize: 24,
     fontWeight: "500",
   },
+  textD: {
+    fontSize: 15,
+  },
   userContainer: {
     marginVertical: 40,
+    alignItems: 'center',
+  },
+  btnContainer: {
+    backgroundColor: colors.primary500,
+    height: 50,
+    width: '50%',
+
   },
 });
 

@@ -1,7 +1,7 @@
 import 'react-native-gesture-handler';
 import * as React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { SafeAreaView, StyleSheet, ImageBackground, View, Text, TouchableOpacity, Image, Pressable } from 'react-native';
+import { SafeAreaView, ImageBackground, View, Text, Image } from 'react-native';
 import { Feather, MaterialCommunityIcons, AntDesign } from 'react-native-vector-icons';
 import { DrawerContentScrollView, DrawerItemList, createDrawerNavigator, DrawerItem } from '@react-navigation/drawer';
 import colors from '../config/colors';
@@ -31,7 +31,7 @@ function DrawerNavigation() {
                     drawerIcon: ({ color, size }) => (
                         <Feather name="home" color={color} size={size} style={{ padding: 2 }} />
                     ),
-                    drawerLabel: 'Posts'
+                    drawerLabel: 'Events'
                 }}
                 component={Posts} />
             <Drawer.Screen
@@ -40,7 +40,7 @@ function DrawerNavigation() {
                     drawerIcon: ({ color, size }) => (
                         <MaterialCommunityIcons name="post-outline" size={size} color={color} />
                     ),
-                    drawerLabel: 'My Posts'
+                    drawerLabel: 'My Events'
                 }}
                 component={MyPosts} />
             <Drawer.Screen
@@ -78,13 +78,14 @@ function DrawerNavigation() {
 
 function CustomDrawer({ ...props }) {
     const authCtx = React.useContext(AuthContext);
+    // console.log(authCtx.user.user_metadata)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} translucent={false} />
             <ImageBackground blurRadius={15} source={require('../assets/beach.jpg')} style={{ width: "100%", height: 210, marginTop: -5, marginBottom: 5, }} >
                 <View style={{ justifyContent: 'center', alignContent: 'center', flex: 1, alignItems: 'center' }}>
                     <Image source={require('../assets/dpIcon.png')} style={{ width: 80, height: 80, borderRadius: 50, }} />
-                    <Text style={{ color: 'white', }}>Harry Potter</Text>
+                    <Text style={{ color: colors.white, padding: 10, fontSize: 20, fontWeight: 'bold' }}>{authCtx.user?.user_metadata?.full_name}</Text>
                 </View>
             </ImageBackground>
             <DrawerContentScrollView {...props} >
@@ -101,9 +102,11 @@ function CustomDrawer({ ...props }) {
                 />
 
             </DrawerContentScrollView>
-            <Text style={{ color: colors.primary100, fontSize: 16, margin: 10, textAlign: 'center', color: 'grey' }}>
-                Sports Event Organizer
-            </Text>
+            <>
+                <Text style={{ color: colors.primary100, fontSize: 16, margin: 10, textAlign: 'center', color: 'grey' }}>
+                    Sports Event Organizer
+                </Text>
+            </>
         </SafeAreaView>
 
     );

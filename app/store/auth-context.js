@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabase';
 
 
 export const AuthContext = createContext({
-  tokenid: '',
+  user: '',
   isAuthenticated: false,
   authenticate: (tokenid) => { },
   logout: () => { },
@@ -15,10 +15,10 @@ function AuthContextProvider({ children }) {
 
   async function authenticate(tokenid) {
     try {
-      await SecureStorage.setItemAsync('tokenid', tokenid);
+      // await SecureStorage.setItemAsync('tokenid', tokenid);
       setAuthtokenid(tokenid);
     } catch (error) {
-      console.log(error);
+      // console.log(error);
     }
   }
 
@@ -27,14 +27,14 @@ function AuthContextProvider({ children }) {
       console.log('logout-----------');
       let { error } = await supabase.auth.signOut();
       setAuthtokenid(null);
-      await SecureStorage.deleteItemAsync('tokenid');
+      // await SecureStorage.deleteItemAsync('tokenid');
     } catch (error) {
       console.log(error);
     }
   }
 
   const value = {
-    tokenid: authtokenid,
+    user: authtokenid,
     isAuthenticated: (!!authtokenid),
     authenticate: authenticate,
     logout: logout,

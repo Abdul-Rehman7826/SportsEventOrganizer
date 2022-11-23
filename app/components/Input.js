@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TextInput } from 'react-native';
 import colors from '../config/colors';
-
+import defaultStyles from '../config/styles';
 function Input({ label, password, ...Props }) {
   return (
     <View>
@@ -18,6 +18,7 @@ const styles = StyleSheet.create({
     color: colors.primary500,
     fontWeight: 'bold',
     fontSize: 20,
+
   },
 
   Input: {
@@ -25,11 +26,13 @@ const styles = StyleSheet.create({
     height: 50,
     backgroundColor: 'white',
     paddingHorizontal: 10,
-    paddingVertical: 15,
+    paddingVertical: 5,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: colors.primary500,
     opacity: 1,
+    fontSize: 18,
+    fontFamily: Platform.OS === "android" ? "Roboto" : "Avenir",
   },
 });
 
