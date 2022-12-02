@@ -12,10 +12,12 @@ import Profile from './profileNavigation';
 import Team from './teamNavigation';
 
 import { AuthContext } from '../store/auth-context';
+import { supabase } from '../lib/supabase';
 
 const Drawer = createDrawerNavigator();
 
 function DrawerNavigation() {
+
     return (
         <Drawer.Navigator
             drawerContentOptions={{
@@ -77,14 +79,37 @@ function DrawerNavigation() {
 }
 
 function CustomDrawer({ ...props }) {
+    const [avatar_url, setAvatar_url] = React.useState()
     const authCtx = React.useContext(AuthContext);
+    const getProfile = async () => {
+        try {
+            const { data: { user } } = await supabase.auth.getUser();
+            console.log('user id :: ', user.id);
+            let { data, error, status } = await supabase
+                .from('profiles')
+                .select(`*`)
+                .eq('id', user.id)
+                .single()
+
+            if (data) {
+                setAvatar_url(data.avatar_url);
+            }
+            if (error) throw error
+        } catch (error) {
+            console.log(error.message)
+        } finally {
+        }
+    };
+    React.useEffect(() => {
+        getProfile();
+    }, []);
     // console.log(authCtx.user.user_metadata)
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} translucent={false} />
             <ImageBackground blurRadius={15} source={require('../assets/beach.jpg')} style={{ width: "100%", height: 210, marginTop: -5, marginBottom: 5, }} >
                 <View style={{ justifyContent: 'center', alignContent: 'center', flex: 1, alignItems: 'center' }}>
-                    <Image source={require('../assets/dpIcon.png')} style={{ width: 80, height: 80, borderRadius: 50, }} />
+                    <Image source={!avatar_url ? (require('../assets/dpIcon.png')) : ({ uri: avatar_url })} style={{ width: 80, height: 80, borderRadius: 50, }} />
                     <Text style={{ color: colors.white, padding: 10, fontSize: 20, fontWeight: 'bold' }}>{authCtx.user?.user_metadata?.full_name}</Text>
                 </View>
             </ImageBackground>

@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { View, StyleSheet, Image } from "react-native";
 
 import colors from "../../config/colors";
 import Text from "../../components/Text";
@@ -20,9 +20,9 @@ function postDetailsScreen({ route, navigation }) {
         <View >
           <Text style={styles.textS}>{item.category}</Text>
         </View>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.light }}>Event Date : </Text>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.medium }}>Event Date : </Text>
         <Text style={styles.textS}>{item.eventDate}</Text>
-        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.light }}>Description : </Text>
+        <Text style={{ fontSize: 14, fontWeight: 'bold', color: colors.medium }}>Description : </Text>
         <Text style={styles.textD}>{item.description}</Text>
         <View style={styles.userContainer}>
           {item.user_id != authCtx.user?.id &&
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   userContainer: {
-    marginVertical: 40,
+    // marginVertical: auto,
     alignItems: 'center',
   },
   btnContainer: {

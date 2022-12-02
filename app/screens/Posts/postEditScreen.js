@@ -114,7 +114,11 @@ function postEditScreen({ navigation }) {
         owner_id: authCtx.user.id
       },
     ])
-    if (!error) console.log("Data Saved::", data)
+    if (!error) {
+      console.log("Data Saved::", data)
+      navigation.goBack();
+    }
+
     if (error) console.log(error.message);
     setLoading(false);
   };

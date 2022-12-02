@@ -13,6 +13,7 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 import { supabase } from "../../lib/supabase";
 import LoadingOverlay from "../../components/ui/LoadingOverlay";
 import Screen from "../../components/Screen";
+import ActivityIndicator from "../../components/ActivityIndicator";
 
 function AccountScreen({ navigation }) {
   const [loading, setLoading] = useState();
@@ -152,11 +153,10 @@ function AccountScreen({ navigation }) {
     getProfile();
   }, [navigation])
 
-  if (loading)
-    return <LoadingOverlay message={'Loading...'} />
 
   return (
     <Screen>
+      <ActivityIndicator visible={loading} />
       <View style={styles.outContainer}>
         <View style={[styles.container]}>
           <View style={styles.ProfilePic}>
@@ -175,17 +175,18 @@ function AccountScreen({ navigation }) {
 
           <Input label={'Name :'}
             value={fname}
-            onchange={(t) => setFname(t)}
+            onChangeText={(t) => setFname(t)}
           />
           <Input label={'Email :'}
+
             keyboardType='email-address'
             value={email}
-            onchange={(text) => { setPhone(text) }}
+            onChangeText={(text) => { setEmail(text) }}
           />
           <Input label={'Phone :'}
             keyboardType='phone-pad'
             value={phone}
-            onchange={(text) => { setPhone(text) }}
+            onChangeText={(text) => { setPhone(text) }}
 
           />
           <AppButton onPress={UpdateProfile} title={'Save'} width={'50%'} color={colors.black} />

@@ -22,15 +22,9 @@ const postNavigation = ({ navigation }) => {
           <View
             style={{
               flexDirection: "row",
-              justifyContent: "space-between",
-              alignItems: 'center',
-              width: 100,
               marginRight: 25,
             }}
           >
-            <TouchableOpacity>
-              <FontAwesome name="plus" size={28} color="#fff" />
-            </TouchableOpacity>
             <TouchableOpacity onPress={() => navigation.toggleDrawer()}>
               <Ionicons name="menu" size={35} color="#fff" />
             </TouchableOpacity>
@@ -39,7 +33,7 @@ const postNavigation = ({ navigation }) => {
 
       }}
     >
-      <Stack.Screen name="mypostsScreens" component={mypostsScreens} />
+      <Stack.Screen name="mypostsScreens" component={mypostsScreens} options={{ title: 'My Events' }} />
       <Stack.Screen name="mypostEditScreens" component={mypostEditScreens} />
     </Stack.Navigator>
   )

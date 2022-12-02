@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import Screen from "../../components/Screen";
@@ -7,32 +7,40 @@ import {
   ListItemDeleteAction,
   ListItemSeparator,
 } from "../../components/lists";
+import { supabase } from "../../lib/supabase";
+import moment from "moment";
 
 
-const initialMessages = [
-  {
-    id: 1,
-    title: "Mosh Hamedani",
-    description: "Hey! Is this item still available?",
-    image: require("../../assets/imtyaz.png"),
-  },
-  {
-    id: 2,
-    title: "Mosh Hamedani",
-    description:
-      "I'm interested in this item. When will you be able to post it?",
-    image: require("../../assets/imtyaz.png"),
-  },
-];
 
 function MessagesScreen(props) {
-  const [messages, setMessages] = useState(initialMessages);
+  const [messages, setMessages] = useState();
   const [refreshing, setRefreshing] = useState(false);
 
   const handleDelete = (message) => {
     // Delete the message from messages
     setMessages(messages.filter((m) => m.id !== message.id));
   };
+
+  const loadData = async () => {
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      let { data: chat_list_view, error } = await supabase
+        .from('chat_list_view')
+        .select("*")
+        .eq('owner_ch_id', user.id);
+      if (error) throw error
+      if (!error) {
+        console.log(chat_list_view);
+        setMessages(chat_list_view);
+      }
+    } catch (error) {
+      console.log("error::", error);
+
+    }
+  };
+  useEffect(() => {
+    loadData();
+  }, []);
 
   return (
     <Screen>
@@ -41,9 +49,9 @@ function MessagesScreen(props) {
         keyExtractor={(message) => message.id.toString()}
         renderItem={({ item }) => (
           <ListItem
-            title={item.title}
-            subTitle={item.description}
-            image={item.image}
+            title={item.eventTitle}
+            subTitle={moment(item.created_at).fromNow()}
+            image={{ uri: item.avatar_url }}
             onPress={() => console.log("Message selected", item)}
             renderRightActions={() => (
               <ListItemDeleteAction onPress={() => handleDelete(item)} />
@@ -53,14 +61,7 @@ function MessagesScreen(props) {
         ItemSeparatorComponent={ListItemSeparator}
         refreshing={refreshing}
         onRefresh={() => {
-          setMessages([
-            {
-              id: 2,
-              title: "T2",
-              description: "D2",
-              image: require("../../assets/imtyaz.png"),
-            },
-          ]);
+          loadData();
         }}
       />
     </Screen>

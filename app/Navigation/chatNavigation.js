@@ -19,7 +19,7 @@ const chatNavigation = ({ navigation }) => {
           fontWeight: 'bold',
         },
       }}
-      initialRouteName='MessageViewScreen' >
+      initialRouteName='MessageScreen' >
       <Stack.Screen name="MessageViewScreen" component={MessageViewScreen}
       />
       <Stack.Screen name="MessageScreen" component={MessageScreen} />
