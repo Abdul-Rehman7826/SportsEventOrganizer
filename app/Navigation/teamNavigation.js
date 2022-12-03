@@ -20,7 +20,7 @@ const chatNavigation = ({ navigation }) => {
         },
       }}
       initialRouteName='CreateTeamScreen' >
-      <Stack.Screen name="CreateTeamScreen" component={CreateTeamScreen} />
+      <Stack.Screen name="CreateTeamScreen" component={CreateTeamScreen} options={{ title: 'Team' }} />
     </Stack.Navigator>
   )
 }

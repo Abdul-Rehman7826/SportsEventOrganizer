@@ -8,6 +8,7 @@ import { supabase } from "../../lib/supabase";
 import moment from "moment";
 import colors from "../../config/colors";
 import { ListItem, ListItemSeparator } from "../../components/lists";
+import { StatusBar } from "expo-status-bar";
 
 function postsScreen({ navigation }) {
   const [data, setData] = useState([]);
@@ -108,6 +109,7 @@ function postsScreen({ navigation }) {
   }
   return (
     <Screen style={styles.outContainer} >
+      <StatusBar style="auto" />
       <FlatList
         data={data}
         renderItem={renderItem}

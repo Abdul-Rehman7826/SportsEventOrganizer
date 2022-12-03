@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import Screen from "../../components/Screen";
@@ -9,12 +9,16 @@ import {
 } from "../../components/lists";
 import { supabase } from "../../lib/supabase";
 import moment from "moment";
+import { StatusBar } from "expo-status-bar";
+import { AuthContext } from "../../store/auth-context";
 
 
 
-function MessagesScreen(props) {
+function MessagesScreen({ route, navigation }) {
+  const authCtx = useContext(AuthContext);
   const [messages, setMessages] = useState();
   const [refreshing, setRefreshing] = useState(false);
+  const [user, setUser] = useState();
 
   const handleDelete = (message) => {
     // Delete the message from messages
@@ -23,14 +27,12 @@ function MessagesScreen(props) {
 
   const loadData = async () => {
     try {
-      const { data: { user } } = await supabase.auth.getUser();
       let { data: chat_list_view, error } = await supabase
         .from('chat_list_view')
         .select("*")
-        .eq('owner_ch_id', user.id);
-      if (error) throw error
+        .eq('owner_ch_id', authCtx.user.id);
+      if (error) throw error.message
       if (!error) {
-        console.log(chat_list_view);
         setMessages(chat_list_view);
       }
     } catch (error) {
@@ -38,12 +40,16 @@ function MessagesScreen(props) {
 
     }
   };
+  const navigateTochat = (item) => {
+    navigation.navigate('MessageViewScreen', { item: item })
+  }
   useEffect(() => {
     loadData();
   }, []);
 
   return (
     <Screen>
+      <StatusBar style="auto" />
       <FlatList
         data={messages}
         keyExtractor={(message) => message.id.toString()}
@@ -52,7 +58,7 @@ function MessagesScreen(props) {
             title={item.eventTitle}
             subTitle={moment(item.created_at).fromNow()}
             image={{ uri: item.avatar_url }}
-            onPress={() => console.log("Message selected", item)}
+            onPress={() => navigateTochat(item)}
             renderRightActions={() => (
               <ListItemDeleteAction onPress={() => handleDelete(item)} />
             )}

@@ -1,7 +1,7 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
-import { postsScreens, postEditScreens, postDetailsScreens } from '../screens/Posts';
+import { postsScreens, postEditScreens, postDetailsScreens, chat } from '../screens/Posts';
 import colors from '../config/colors';
 
 const Stack = createStackNavigator();
@@ -23,6 +23,7 @@ const postNavigation = ({ navigation }) => {
       <Stack.Screen name="postsScreens" component={postsScreens} options={{ title: 'Events' }} />
       <Stack.Screen name="postEditScreens" component={postEditScreens} options={{ title: 'Create Event' }} />
       <Stack.Screen name="postDetailsScreens" component={postDetailsScreens} options={{ title: 'Create Event' }} />
+      <Stack.Screen name="chatScreen" component={chat} />
     </Stack.Navigator >
   )
 }

@@ -20,9 +20,8 @@ const chatNavigation = ({ navigation }) => {
         },
       }}
       initialRouteName='MessageScreen' >
-      <Stack.Screen name="MessageViewScreen" component={MessageViewScreen}
-      />
-      <Stack.Screen name="MessageScreen" component={MessageScreen} />
+      <Stack.Screen name="MessageViewScreen" component={MessageViewScreen} />
+      <Stack.Screen name="MessageScreen" component={MessageScreen} options={{ title: 'Chats' }} />
     </Stack.Navigator>
   )
 }

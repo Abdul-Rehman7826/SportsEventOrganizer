@@ -1,14 +1,14 @@
+import { Alert, FlatList, Keyboard, StyleSheet, Text, TextInput, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native'
 import React, { useContext, useEffect, useLayoutEffect, useState } from 'react'
-import { StyleSheet, Text, TextInput, View, TouchableOpacity, TouchableWithoutFeedback, Keyboard, ScrollView, FlatList } from 'react-native'
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import Screen from '../../components/Screen'
-import colors from "../../config/colors";
-import ActivityIndicator from '../../components/ActivityIndicator';
-import { supabase } from '../../lib/supabase';
 import { AuthContext } from '../../store/auth-context';
+import { supabase } from '../../lib/supabase';
+import colors from '../../config/colors';
+import Screen from '../../components/Screen';
 import { StatusBar } from 'expo-status-bar';
+import ActivityIndicator from '../../components/ActivityIndicator';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 
-const MessageViewScreen = ({ route, navigation }) => {
+const chat = ({ route, navigation }) => {
     const authCtx = useContext(AuthContext);
     const { item } = route.params;
     const [loading, setLoading] = useState(false);
@@ -18,26 +18,28 @@ const MessageViewScreen = ({ route, navigation }) => {
     const [text, setText] = useState('');
     const [message, setMessage] = useState([]);
 
-
     useLayoutEffect(() => {
         navigation.setOptions({
-            title: item.eventTitle,
+            title: route.params.item.eventTitle,
         });
 
     }, [route.params.item]);
-
-
     useEffect(() => {
         const focusHandler = navigation.addListener('focus', () => {
-            setEvent_id(route.params.item.event_id);
+            console.log('Chate focus', route.params.item);
+            setEvent_id(route.params.item.id);
             setSender_id(authCtx.user.id);
-            setChat_List_Id(route.params.item.id);
         });
         return focusHandler;
+
     }, [route.params.item]);
 
     useEffect(() => {
+        loadChatId();
         loadMessage();
+    }, [event_id, sender_id]);
+
+    useEffect(() => {
         const events = supabase.channel('custom-all-channel')
             .on(
                 'postgres_changes',
@@ -48,10 +50,10 @@ const MessageViewScreen = ({ route, navigation }) => {
             ).subscribe()
 
         return () => { events.subscribe };
-    }, [chat_list_id]);
-
+    }, []);
     const sendMessage = async () => {
         Keyboard.dismiss();
+
         try {
             const { data, error } = await supabase
                 .from('chat')
@@ -62,16 +64,17 @@ const MessageViewScreen = ({ route, navigation }) => {
                         text
                     },
                 ]).select();
-            if (error) throw error
+            if (error) throw error.message
             if (!error) {
-                console.log(data)
+                console.log(data);
             }
         } catch (error) {
-            console.log(error);
+            Alert.alert('Error !', error);
         } finally {
             setText('');
         }
     }
+
     const loadMessage = async () => {
         try {
             console.log('loadMessage :: ', chat_list_id);
@@ -88,8 +91,42 @@ const MessageViewScreen = ({ route, navigation }) => {
             console.log(error)
         }
     };
-
-
+    const loadChatId = async () => {
+        try {
+            setLoading(true);
+            console.log(' :: ', sender_id, " :: ", event_id);
+            let { data: ChatList, error } = await supabase
+                .from('ChatList')
+                .select('*')
+                .eq('event_id', event_id)
+                .eq('owner_ch_id', sender_id);
+            if (!error) {
+                if (ChatList.length == 0) {
+                    const { data, error } = await supabase
+                        .from('ChatList')
+                        .insert([
+                            {
+                                owner_ch_id: sender_id,
+                                event_id: event_id
+                            },
+                        ]).select();
+                    if (error) throw error
+                    if (!error) {
+                        setChat_List_Id(data[0].id);
+                        console.log("ChatList 1 ID:: ", data[0].id);
+                    }
+                } else {
+                    setChat_List_Id(ChatList[0].id);
+                    console.log("ChatList 2 ID:: ", ChatList[0].id);
+                }
+            }
+            if (error) throw error
+        } catch (error) {
+            console.log(error.message);
+        } finally {
+            setLoading(false);
+        }
+    };
     const renderitem = ({ item }) => {
         return (
             item.sender_id == sender_id ? (
@@ -103,6 +140,7 @@ const MessageViewScreen = ({ route, navigation }) => {
             )
         );
     }
+
     return (
         <Screen>
             <StatusBar style="light" />
@@ -132,9 +170,9 @@ const MessageViewScreen = ({ route, navigation }) => {
             </View>
         </Screen>
     )
-};
+}
 
-export default MessageViewScreen
+export default chat
 
 const styles = StyleSheet.create({
     outContainer: {
@@ -182,6 +220,7 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         marginLeft: 10,
         marginBottom: 15,
+        fontSize: 18,
     },
 
     senderName: {
@@ -212,6 +251,7 @@ const styles = StyleSheet.create({
     receiverText: {
         color: "#000",
         fontWeight: "500",
+        fontSize: 18,
         marginLeft: 10,
     },
 })
