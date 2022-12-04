@@ -12,8 +12,6 @@ import moment from "moment";
 import { StatusBar } from "expo-status-bar";
 import { AuthContext } from "../../store/auth-context";
 
-
-
 function MessagesScreen({ route, navigation }) {
   const authCtx = useContext(AuthContext);
   const [messages, setMessages] = useState();
@@ -24,13 +22,13 @@ function MessagesScreen({ route, navigation }) {
     // Delete the message from messages
     setMessages(messages.filter((m) => m.id !== message.id));
   };
-
   const loadData = async () => {
+    console.log(authCtx.user.id);
     try {
       let { data: chat_list_view, error } = await supabase
         .from('chat_list_view')
         .select("*")
-        .eq('owner_ch_id', authCtx.user.id);
+        .eq('receiver_id', authCtx.user.id);
       if (error) throw error.message
       if (!error) {
         setMessages(chat_list_view);

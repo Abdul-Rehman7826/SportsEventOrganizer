@@ -2,13 +2,11 @@ import 'react-native-gesture-handler';
 import { useContext, useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import AppLoading from 'expo-app-loading';
-import * as SecureStorage from 'expo-secure-store';
 import { NavigationContainer } from '@react-navigation/native';
 import AuthContextProvider, { AuthContext } from './app/store/auth-context';
 import AuthNavigation from './app/Navigation/AuthNavigation';
 import DrawerNavigation from './app/Navigation/DrawerNavigation';
 import { supabase } from './app/lib/supabase';
-import colors from './app/config/colors';
 
 function Navigation() {
   const authCtx = useContext(AuthContext);
@@ -21,9 +19,7 @@ function Navigation() {
 }
 
 function Root() {
-
   const [isTryingLogin, setIsTryingLogin] = useState(true);
-
   const authCtx = useContext(AuthContext);
   async function loaduser() {
     const { data: { user } } = await supabase.auth.getUser();
@@ -31,9 +27,7 @@ function Root() {
     setIsTryingLogin(false);
   }
   useEffect(() => {
-
     loaduser();
-
     const auth = () => supabase.auth.onAuthStateChange((event, session) => {
       if (event === 'SIGNED_OUT') authCtx.authenticate('');
       if (event === 'SIGNED_IN') authCtx.authenticate(session.user)
@@ -65,7 +59,7 @@ function Root() {
 export default function App() {
   return (
     <>
-      <StatusBar style="light" />
+      <StatusBar style="auto" />
       <AuthContextProvider>
         <Root />
       </AuthContextProvider>
