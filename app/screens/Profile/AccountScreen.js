@@ -41,7 +41,7 @@ function AccountScreen({ navigation }) {
       setLoading(true);
       const { data, error } = await supabase.storage
         .from('avatars')
-        .upload(`_${Math.floor(Math.random() * 1000) + 2}_avatar.${ext}`, formData);
+        .upload(`_${Math.floor(Math.random() * 1000) + 2}${filename}_avatar.${ext}`, formData);
       if (error) throw error.message;
       if (!error) setAvatar_url(`https://utvogrvlrqwaunjqpryp.supabase.co/storage/v1/object/public/avatars/${data.path}`);
     } catch (error) {
