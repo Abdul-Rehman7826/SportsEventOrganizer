@@ -24,15 +24,13 @@ function AccountScreen({ navigation }) {
   const [imaget, setImaget] = useState();
 
   const [visible, setVisible] = useState(false);
-
   const toggleBottomNavigationView = () => {
     setVisible(!visible);
-
   };
   const uploadeBucket = async () => {
     const ext = imaget.uri.split('.').pop();
     const filename = imaget.uri.replace(/^.*[\\\/]/, "");
-    // console.log(imaget);
+    console.log(imaget);
     var formData = new FormData();
     formData.append("files", {
       uri: imaget.uri,
@@ -43,8 +41,8 @@ function AccountScreen({ navigation }) {
       setLoading(true);
       const { data, error } = await supabase.storage
         .from('avatars')
-        .upload(`_${Math.floor(Math.random() * 100) + 1}_avatar.${ext}`, formData);
-      // console.log(error);
+        .upload(`_${Math.floor(Math.random() * 1000) + 2}_avatar.${ext}`, formData);
+      if (error) throw error.message;
       if (!error) setAvatar_url(`https://utvogrvlrqwaunjqpryp.supabase.co/storage/v1/object/public/avatars/${data.path}`);
     } catch (error) {
       Alert.alert('Image Upload error', error.message);
@@ -54,41 +52,30 @@ function AccountScreen({ navigation }) {
   };
   const takePicture = async () => {
     toggleBottomNavigationView();
-    try {
-      let photo = await ImagePicker.launchCameraAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
-      if (!photo.cancelled) {
-        setImaget(photo);
-        uploadeBucket();
-      }
-    } catch (e) {
-      console.log(e);
+    let photo = await ImagePicker.launchCameraAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+    if (!photo.cancelled) {
+      setImaget(photo);
+      uploadeBucket();
     }
-
   };
 
   const pickImage = async () => {
     toggleBottomNavigationView();
-    try {
-      let photo = await ImagePicker.launchImageLibraryAsync({
-        mediaTypes: ImagePicker.MediaTypeOptions.Images,
-        allowsEditing: true,
-        aspect: [4, 3],
-        quality: 1,
-      });
+    let photo = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
 
-      if (!photo.cancelled) {
-        setImaget(photo);
-        uploadeBucket();
-      }
-
-
-    } catch (error) {
-      console.log(error);
+    if (!photo.cancelled) {
+      setImaget(photo);
+      uploadeBucket();
     }
   };
 
@@ -102,8 +89,8 @@ function AccountScreen({ navigation }) {
         .from('profiles')
         .select(`*`)
         .eq('id', user.id)
-        .single()
-
+        .single();
+      if (error) throw error.message;
       if (data) {
         setFname(data.full_name);
         setPhone(data.phone);
@@ -120,9 +107,7 @@ function AccountScreen({ navigation }) {
   const UpdateProfile = async () => {
     try {
       setLoading(true)
-
       const { data: { user } } = await supabase.auth.getUser();
-
       const { error } = await supabase
         .from('profiles')
         .upsert({
@@ -151,7 +136,7 @@ function AccountScreen({ navigation }) {
       if (!status === 'granted') Alert.alert("Cannot access the Camera !");;
     })();
     getProfile();
-  }, [navigation])
+  }, [])
 
 
   return (
@@ -162,7 +147,6 @@ function AccountScreen({ navigation }) {
           <View style={styles.ProfilePic}>
             <ListItem
               title={fname}
-              // subTitle={email}
               image={{ uri: avatar_url }}
               chevron={false}
               imagePicker={true}

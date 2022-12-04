@@ -73,7 +73,7 @@ function postsScreen({ navigation }) {
       ).subscribe()
 
     return () => { events.subscribe };
-  }, [navigation])
+  }, [])
 
   const renderItem = ({ item }) => {
     const { id, eventTitle, category,
