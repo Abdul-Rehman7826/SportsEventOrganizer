@@ -28,7 +28,7 @@ function SignUp({ navigation }) {
     setIsAuthenticating(true);
     try {
       const user = await createUser(email, password, phone, fName);
-      if(user)   navigation.navigate('Login');
+      if (user) navigation.navigate('Login');
 
     } catch (error) {
       Alert.alert('Authentication error', error.message);
@@ -63,6 +63,7 @@ function SignUp({ navigation }) {
           <TextInput
             value={phone}
             onChangeText={setPhone}
+            keyboardType={'phone-pad'}
             style={styles.textInput}
           />
         </View>
@@ -72,7 +73,9 @@ function SignUp({ navigation }) {
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
+            keyboardType={'email-address'}
             style={styles.textInput}
+
           />
         </View>
         <View style={styles.inputContainer}>

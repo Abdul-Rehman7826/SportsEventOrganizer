@@ -40,6 +40,7 @@ const chat = ({ route, navigation }) => {
     }, [event_id, sender_id]);
 
     useEffect(() => {
+        console.log('Subscription');
         const events = supabase.channel('custom-all-channel')
             .on(
                 'postgres_changes',
@@ -48,12 +49,10 @@ const chat = ({ route, navigation }) => {
                     loadMessage();
                 }
             ).subscribe()
-
         return () => { events.subscribe };
-    }, []);
+    }, [sendMessage, route.params.item]);
     const sendMessage = async () => {
         Keyboard.dismiss();
-
         try {
             const { data, error } = await supabase
                 .from('chat')

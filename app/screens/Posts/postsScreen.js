@@ -1,7 +1,6 @@
 import React, { useEffect, useLayoutEffect, useState } from "react";
 import { StyleSheet, Text, TouchableOpacity, View, FlatList, Button, Image } from "react-native";
 
-import Card from "../../components/Card";
 import Screen from "../../components/Screen";
 import { FontAwesome, Ionicons } from "@expo/vector-icons";
 import { supabase } from "../../lib/supabase";
@@ -40,7 +39,7 @@ function postsScreen({ navigation }) {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "Events",
+      title: "Home",
       headerRight: () => (
         <View
           style={{
@@ -101,7 +100,6 @@ function postsScreen({ navigation }) {
             </Text>
           </View>
         </View>
-
         <Button title="more detail.."
           onPress={() => navigation.navigate('postDetailsScreens', { item: item })} />
       </View>

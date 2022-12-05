@@ -28,12 +28,10 @@ const MessageViewScreen = ({ route, navigation }) => {
 
 
     useEffect(() => {
-        const focusHandler = navigation.addListener('focus', () => {
-            setEvent_id(route.params.item.event_id);
-            setSender_id(authCtx.user.id);
-            setChat_List_Id(route.params.item.id);
-        });
-        return focusHandler;
+        setEvent_id(route.params.item.event_id);
+        setSender_id(authCtx.user.id);
+        setChat_List_Id(route.params.item.id);
+
     }, [route.params.item]);
 
     useEffect(() => {
@@ -52,13 +50,14 @@ const MessageViewScreen = ({ route, navigation }) => {
 
     const sendMessage = async () => {
         Keyboard.dismiss();
+        console.log('::', authCtx.user.id);
         try {
             const { data, error } = await supabase
                 .from('chat')
                 .insert([
                     {
                         chat_list_id,
-                        sender_id,
+                        sender_id: authCtx.user.id,
                         text
                     },
                 ]).select();

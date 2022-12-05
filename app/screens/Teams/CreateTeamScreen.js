@@ -95,7 +95,8 @@ const CreateTeamScreen = ({ navigation }) => {
     }
   };
   useEffect(() => {
-
+    loadData();
+    loadTeam();
     const temsView = supabase.channel('custom-all-channel')
       .on(
         'postgres_changes',
@@ -105,8 +106,8 @@ const CreateTeamScreen = ({ navigation }) => {
         }
       )
       .subscribe();
-    loadData();
-    loadTeam();
+
+
     return () => { temsView.subscribe }
   }, []);
   return (
@@ -157,9 +158,7 @@ const CreateTeamScreen = ({ navigation }) => {
           />
         </View>
         <ListItemSeparator />
-
       </View>
-
       <View>
         <FlatList
           data={team_list}
@@ -194,7 +193,6 @@ const styles = StyleSheet.create({
   outContainer: {
     backgroundColor: colors.light,
   },
-
   teamName: {
     flexDirection: 'row',
     alignContent: 'center',

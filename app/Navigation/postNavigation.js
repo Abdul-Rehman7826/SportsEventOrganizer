@@ -20,7 +20,7 @@ const postNavigation = ({ navigation }) => {
         },
       }}
     >
-      <Stack.Screen name="postsScreens" component={postsScreens} options={{ title: 'Events' }} />
+      <Stack.Screen name="postsScreens" component={postsScreens} options={{ title: 'Home' }} />
       <Stack.Screen name="postEditScreens" component={postEditScreens} options={{ title: 'Create Event' }} />
       <Stack.Screen name="postDetailsScreens" component={postDetailsScreens} options={{ title: 'Create Event' }} />
       <Stack.Screen name="chatScreen" component={chat} />

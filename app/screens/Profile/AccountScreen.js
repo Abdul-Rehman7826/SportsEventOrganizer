@@ -27,15 +27,16 @@ function AccountScreen({ navigation }) {
   const toggleBottomNavigationView = () => {
     setVisible(!visible);
   };
-  const uploadeBucket = async () => {
-    const ext = imaget.uri.split('.').pop();
-    const filename = imaget.uri.replace(/^.*[\\\/]/, "");
-    console.log(imaget);
+  const uploadeBucket = async (photo) => {
+    console.log(photo);
+    const ext = photo.uri.split('.').pop();
+    const filename = photo.uri.replace(/^.*[\\\/]/, "");
+
     var formData = new FormData();
     formData.append("files", {
-      uri: imaget.uri,
+      uri: photo.uri,
       name: filename,
-      type: `${imaget.type}/${ext}`
+      type: `${photo.type}/${ext}`
     })
     try {
       setLoading(true);
@@ -60,7 +61,7 @@ function AccountScreen({ navigation }) {
     });
     if (!photo.cancelled) {
       setImaget(photo);
-      uploadeBucket();
+      uploadeBucket(photo);
     }
   };
 
@@ -75,7 +76,7 @@ function AccountScreen({ navigation }) {
 
     if (!photo.cancelled) {
       setImaget(photo);
-      uploadeBucket();
+      uploadeBucket(photo);
     }
   };
 

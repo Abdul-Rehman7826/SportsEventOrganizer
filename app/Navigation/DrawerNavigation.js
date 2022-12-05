@@ -33,7 +33,7 @@ function DrawerNavigation() {
                     drawerIcon: ({ color, size }) => (
                         <Feather name="home" color={color} size={size} style={{ padding: 2 }} />
                     ),
-                    drawerLabel: 'Events'
+                    drawerLabel: 'Home'
                 }}
                 component={Posts} />
             <Drawer.Screen
@@ -102,8 +102,9 @@ function CustomDrawer({ ...props }) {
     };
     React.useEffect(() => {
         getProfile();
+        return () => null;
     }, []);
-    // console.log(authCtx.user.user_metadata)
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <StatusBar barStyle={'light-content'} translucent={false} />
