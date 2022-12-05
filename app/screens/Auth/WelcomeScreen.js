@@ -1,43 +1,38 @@
-import React from 'react';
+import React, { useLayoutEffect } from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 
-import Constants from "expo-constants";
-import colors from '../config/colors';
-import Screen from '../components/Screen';
+import colors from '../../config/colors';
+import Screen from '../../components/Screen';
 
 
 function Welcome({ navigation }) {
-  return (
+  return (    
     <Screen style={styles.outContainer}>
-
       <View style={styles.imgContainer}>
-        <Image style={styles.image} source={require('../assets/logo.png')}/>
+        <Image style={styles.image} source={require('../../assets/logo.png')}/>
         <Text style={styles.imgText}>Sports Event Organizer</Text>
        </View>
       <View style={[styles.buttonContainer]}>
         <Text style={styles.bestText}>Best way to Play!</Text>
         <TouchableOpacity
           style={[styles.singUp,styles.shadowOpt]}
-          onPress={() => console.log('SignUp Option')}>
+          onPress={() => navigation.navigate('Registeration')}>
           <Text style={styles.singupText}>Sign Up</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.singIn,styles.shadowOpt]}
-          onPress={() => console.log('Signin Option')}>
+          onPress={() => navigation.navigate('Login')}>
           <Text style={styles.singinText}>Login</Text>
         </TouchableOpacity>
       </View>
-
     </Screen >
   );
 }
 
 const styles = StyleSheet.create({
   outContainer: {
-
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.black 
   },
   imgContainer: {
     flex:3,
@@ -54,11 +49,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 35,
     color: 'black',
-    marginVertical: 18,
-    color: colors.white,
+    color: colors.black,
   },
   buttonContainer: {
-    flex: 1.5,
+    flex: 1.8,
     alignItems: 'center',
     justifyContent:'center',
     backgroundColor: colors.light,
@@ -69,7 +63,6 @@ const styles = StyleSheet.create({
   bestText: {
     fontSize: 16,
     color: 'black',
-    marginVertical: 20,
   },
   singUp: {
     width: '80%',

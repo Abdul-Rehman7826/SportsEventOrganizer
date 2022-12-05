@@ -6,28 +6,29 @@ import Text from "./Text";
 
 function CategoryPickerItem({ item, onPress }) {
   return (
-    <View style={styles.container}>
-      <TouchableOpacity onPress={onPress}>
+    <View >
+      <TouchableOpacity style={styles.container} onPress={onPress}>
         <Icon
           backgroundColor={item.backgroundColor}
           name={item.icon}
-          size={80}
+          size={30}
         />
+        <Text style={styles.label}>{item.label}</Text>
       </TouchableOpacity>
-      <Text style={styles.label}>{item.label}</Text>
     </View>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
+    flexDirection: 'row',
     paddingHorizontal: 30,
     paddingVertical: 15,
     alignItems: "center",
-    width: "33%",
+    // width: "33%",
   },
   label: {
-    marginTop: 5,
+    margin: 5,
     textAlign: "center",
   },
 });

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
   View,
   Text,
@@ -6,23 +6,49 @@ import {
   StyleSheet,
   TouchableOpacity,
   TextInput,
-  ImageBackground,
+  Alert,
 } from 'react-native';
-import Screen from '../components/Screen';
-import colors from '../config/colors';
+
+import LoadingOverlay from '../../components/ui/LoadingOverlay';
+import { supabase } from '../../lib/supabase';
+
+import colors from '../../config/colors';
+import Screen from '../../components/Screen';
+import { createUser } from '../../api/auth';
 
 function SignUp({ navigation }) {
   const [fName, setFname] = useState();
   const [phone, setPhone] = useState();
   const [email, setEmail] = useState();
   const [password, setPassword] = useState();
+
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  async function signupHandler() {
+    setIsAuthenticating(true);
+    try {
+      const user = await createUser(email, password, phone, fName);
+      if (user) navigation.navigate('Login');
+
+    } catch (error) {
+      Alert.alert('Authentication error', error.message);
+    } finally {
+      setIsAuthenticating(false);
+    }
+  }
+
+  if (isAuthenticating) {
+    return <LoadingOverlay message="Creating user..." />;
+  }
+
+
   return (
     <Screen style={styles.outContainer}>
       <View style={styles.imgContainer}>
-        <Image style={styles.image} source={require('../assets/logo.png')} />
+        <Image style={styles.image} source={require('../../assets/logo.png')} />
         <Text style={styles.imgText}>Sports Event Organizer</Text>
       </View>
-      <View style={[styles.lastContainer,styles.shadowOpt]}>
+      <View style={[styles.lastContainer, styles.shadowOpt]}>
         <Text style={styles.signUp}>Create Account</Text>
         <View style={styles.inputContainer}>
           <Text style={{ margin: 5 }}>Full Name</Text>
@@ -37,6 +63,7 @@ function SignUp({ navigation }) {
           <TextInput
             value={phone}
             onChangeText={setPhone}
+            keyboardType={'phone-pad'}
             style={styles.textInput}
           />
         </View>
@@ -46,7 +73,9 @@ function SignUp({ navigation }) {
             value={email}
             onChangeText={setEmail}
             autoCapitalize="none"
+            keyboardType={'email-address'}
             style={styles.textInput}
+
           />
         </View>
         <View style={styles.inputContainer}>
@@ -59,17 +88,18 @@ function SignUp({ navigation }) {
           />
         </View>
 
-              
-        <TouchableOpacity style={[styles.singIn,styles.shadowOpt]}>
+
+        <TouchableOpacity style={[styles.singIn, styles.shadowOpt]}
+          onPress={signupHandler}>
           <Text style={styles.singupText}>Sign Up</Text>
         </TouchableOpacity>
 
 
-        <View style={{flexDirection:'row',marginVertical:10}}>
-        <Text >
-          I'm already a member .
+        <View style={{ flexDirection: 'row', marginVertical: 10 }}>
+          <Text >
+            I'm already a member .
           </Text>
-          <TouchableOpacity onPress={() => console.log('signIn')}>
+          <TouchableOpacity onPress={() => navigation.navigate('Login')}>
             <Text
               style={{
                 color: colors.black,
@@ -79,10 +109,9 @@ function SignUp({ navigation }) {
               Login
             </Text>
           </TouchableOpacity>
-        
         </View>
-      
-      
+
+
       </View>
     </Screen>
 
@@ -91,23 +120,18 @@ function SignUp({ navigation }) {
 
 const styles = StyleSheet.create({
   outContainer: {
-    flex: 1,
     alignContent: 'center',
     justifyContent: 'center',
-    backgroundColor: colors.black,
-    padding:6,
+    padding: 6,
   },
 
   imgContainer: {
-    flex: 3,
-    padding: 5,
-    margin: 5,
+    flex: 3.5,
     alignItems: 'center',
-    justifyContent: 'center',
   },
   image: {
-    width: 200,
-    height: 200,
+    width: 100,
+    height: 100,
   },
   lastContainer: {
     alignItems: 'center',
@@ -116,10 +140,10 @@ const styles = StyleSheet.create({
   },
 
   signUp: {
-    fontSize: 20,
+    fontSize: 16,
     color: colors.black,
-    marginVertical: 15,
-    fontWeight:'bold',
+    marginVertical: 10,
+    fontWeight: 'bold',
   },
 
   inputContainer: {
@@ -128,7 +152,7 @@ const styles = StyleSheet.create({
 
   textInput: {
     width: '100%',
-    height:50,
+    height: 50,
     backgroundColor: 'white',
     paddingHorizontal: 10,
     paddingVertical: 15,
@@ -152,7 +176,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  shadowOpt:{
+  shadowOpt: {
     shadowColor: colors.black,
     shadowOffset: {
       width: 0,

@@ -1,16 +1,26 @@
 {
   "expo": {
-    "name": "FairPlayer",
-    "slug": "FairPlayer",
+    "name": "SportsEventOrganizer",
+    "slug": "sport-event-organizer",
+    "owner": "0415-bscs-18",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
+    "plugins": [
+      [
+        "expo-image-picker",
+        {
+          "photosPermission": "custom photos permission",
+          "cameraPermission": "Allow $(PRODUCT_NAME) to open the camera"
+        }
+      ]
+    ],
     "updates": {
       "fallbackToCacheTimeout": 0
     },
